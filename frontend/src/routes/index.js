@@ -7,9 +7,10 @@ import ProductDetailPage from "../pages/ProductDetailPage/ProductDetailPage";
 import SignInPage from "../pages/SignInpage/SignInPage";
 import SignUpPage from "../pages/SignUpPage/SignUpPage";
 import CartPage from "../pages/CartPage/CartPage";
+import AuthPage from "../pages/AuthPage/AuthPage";
 
 const routes = [
-  { 
+  {
     path: "/",
     element: <MainLayout />,
     children: [
@@ -18,6 +19,7 @@ const routes = [
       { path: "productdetail", element: <ProductDetailPage /> },
       { path: "order", element: <OrderPage /> },
       { path: "cart", element: <CartPage /> },
+      { path: "auth", element: <AuthPage /> },
     ],
   },
   {

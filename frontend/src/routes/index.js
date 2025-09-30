@@ -34,7 +34,7 @@ const routes = [
       { index: true, element: <SignUpPage /> },
     ],
   },
-  { path: "/*", element: <NotFoundPage /> }
+  { path: "*", element: <NotFoundPage /> }
 ];
 
 export default routes;

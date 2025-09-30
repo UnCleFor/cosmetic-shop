@@ -1,7 +1,8 @@
 import React from "react";
 import { Input, Badge } from "antd";
-import { ShoppingCartOutlined, UserOutlined } from "@ant-design/icons";
-import { HeaderWrapper, Logo, Nav, RightActions } from "./HeaderComponent.styles";
+import { CartIcon, UserIcon, HeaderWrapper, Logo, LogoImage, RightActions } from "./HeaderComponent.styles";
+import NavComponent from "../NavComponent/NavComponent";
+import SearchComponent from "../SearchComponent/SearchComponent";
 
 const { Search } = Input;
 
@@ -9,28 +10,20 @@ function HeaderComponent() {
   return (
     <HeaderWrapper>
       {/* Logo */}
-      <Logo>GUERLAIN</Logo>
+      <Logo>
+        <a href="/"><LogoImage src="/assets/images/logo.jpg" alt="Logo" /></a>
+      </Logo>
 
       {/* Navigation */}
-      <Nav>
-        <a href="/">Trang chủ</a>
-        <a href="/product">Sản phẩm</a>
-        <a href="/order">Đơn hàng</a>
-        <a href="/about">Về chúng tôi</a>
-      </Nav>
+      <NavComponent />
 
       {/* Search + Icons */}
       <RightActions>
-        <Search
-          placeholder="Tìm kiếm mỹ phẩm..."
-          allowClear
-          onSearch={(value) => console.log(value)}
-          style={{ width: 200 }}
-        />
-        <UserOutlined style={{ fontSize: "1.8rem", cursor: "pointer" }} />
-        <Badge count={2} size="small">
-          <ShoppingCartOutlined style={{ fontSize: "1.8rem", cursor: "pointer" }} />
+        <SearchComponent placeholder="Tìm kiếm sản phẩm"/>
+        <Badge count={4} size="small">
+          <CartIcon style={{ fontSize: "1.8rem", cursor: "pointer" }} />
         </Badge>
+        <UserIcon style={{ fontSize: "1.8rem", cursor: "pointer" }} />
       </RightActions>
     </HeaderWrapper>
   );

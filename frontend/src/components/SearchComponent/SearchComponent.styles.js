@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const SearchWrapper = styled.div`
+export const SearchWrapper = styled.div `
     .ant-input-search {
         .ant-input-affix-wrapper {
             transition: all 0.5s ease;
@@ -11,7 +11,7 @@ export const SearchWrapper = styled.div`
         .ant-input-affix-wrapper-focused,
         .ant-input-affix-wrapper:active {
             border-color: ${({theme}) => theme.colors.primary};
-            box-shadow: 0 0 5px rgba(225, 84, 4, 0.5);
+            box-shadow: ${({theme}) => theme.box_shadows.primary};
         }
 
         /* Nút tìm kiếm (button) */

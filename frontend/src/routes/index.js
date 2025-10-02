@@ -8,6 +8,7 @@ import SignInPage from "../pages/SignInpage/SignInPage";
 import SignUpPage from "../pages/SignUpPage/SignUpPage";
 import CartPage from "../pages/CartPage/CartPage";
 import AuthPage from "../pages/AuthPage/AuthPage";
+import AdminPage from "../pages/AdminPage/AdminPage";
 
 const routes = [
   {
@@ -20,6 +21,7 @@ const routes = [
       { path: "order", element: <OrderPage /> },
       { path: "cart", element: <CartPage /> },
       { path: "auth", element: <AuthPage /> },
+      { path: "admin", element: <AdminPage /> },
     ],
   },
   {

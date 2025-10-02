@@ -1,7 +1,10 @@
 import styled from "styled-components";
-import { ShoppingCartOutlined, UserOutlined } from "@ant-design/icons";
+import {
+  ShoppingCartOutlined,
+  UserOutlined
+} from "@ant-design/icons";
 
-export const HeaderWrapper = styled.header`
+export const HeaderWrapper = styled.header `
   width: 100%;
   display: flex;
   align-items: center;
@@ -15,23 +18,23 @@ export const HeaderWrapper = styled.header`
   box-sizing: border-box;
 `;
 
-export const Logo = styled.div`
+export const Logo = styled.div `
   display: flex;
   align-items: center;
 `;
 
-export const LogoImage = styled.img`
+export const LogoImage = styled.img `
   height: 40px;
   width: auto;
 `;
 
-export const RightActions = styled.div`
+export const RightActions = styled.div `
   display: flex;
   align-items: center;
   gap: 1.6rem;
 `;
 
-export const CartIcon = styled(ShoppingCartOutlined)`
+export const CartIcon = styled(ShoppingCartOutlined) `
   font-size: 1.8rem;
   cursor: pointer;
   transition: color 0.3s ease;
@@ -41,7 +44,7 @@ export const CartIcon = styled(ShoppingCartOutlined)`
   }
 `;
 
-export const UserIcon = styled(UserOutlined)`
+export const UserIcon = styled(UserOutlined) `
   font-size: 1.8rem;
   cursor: pointer;
   transition: color 0.3s ease;

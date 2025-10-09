@@ -14,7 +14,7 @@ function FooterComponent() {
     <FooterWrapper>
       {/* Bên trái: Logo và thông tin liên hệ */}
       <FooterLeft>
-        <Logo src="/assets/images/logo200.jpg" alt="Logo200" />
+        <Logo src="../../assets/images/logo200.jpg" alt="Logo200" />
         <Info>
           <span>📍 534 Lê thị hồng gấm phường Thái Sơn, Mỹ Tho, Đồng Tháp</span>
           <span>📞 0342 835 777</span>

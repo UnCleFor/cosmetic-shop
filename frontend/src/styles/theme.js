@@ -1,6 +1,8 @@
 export const theme = {
   colors: {
     primary: "#E15404",
+    primaryDark: "#C14703",
+    price: "#E15404",
   },
 
   box_shadows: {

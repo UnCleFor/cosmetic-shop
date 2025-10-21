@@ -6,6 +6,6 @@ export const theme = {
   },
 
   box_shadows: {
-    primary: "0 0 5px rgba(225, 84, 4, 0.5)",
+    primary: "0 0 3px rgba(225, 84, 4, 0.15)",
   },
 };

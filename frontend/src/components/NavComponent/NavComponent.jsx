@@ -1,10 +1,9 @@
-// src/components/NavComponent/NavComponent.jsx
 import React from "react";
 import { Nav } from "./NavComponent.styles";
 
-function NavComponent() {
+function NavComponent({className}) {
   return (
-    <Nav>
+    <Nav className={className}>
       <a href="/">Trang chủ</a>
       <a href="/product">Sản phẩm</a>
       <a href="/order">Đơn hàng</a>

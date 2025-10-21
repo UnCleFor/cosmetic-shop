@@ -1,6 +1,6 @@
 import React from "react";
 import ProductCardComponent from "../../components/ProductCardComponent/ProductCardComponent";
-import { PageContainer, Title, ProductGrid } from "./ProductPage.styles";
+import { PageContainer, Title, ProductGrid, FilterSortBar, FilterGroup, SortSelect } from "./ProductPage.styles";
 
 const ProductPage = () => {
   const products = [
@@ -33,6 +33,33 @@ const ProductPage = () => {
   return (
     <PageContainer>
       <Title>Danh mục sản phẩm</Title>
+
+      {/* Filter & Sort Bar */}
+      <FilterSortBar>
+        <FilterGroup>
+          <label>
+            <input type="checkbox" /> Dưới 200k
+          </label>
+          <label>
+            <input type="checkbox" /> 200k - 400k
+          </label>
+          <label>
+            <input type="checkbox" /> Trên 400k
+          </label>
+        </FilterGroup>
+
+        <SortSelect>
+          <label>Sắp xếp:</label>
+          <select>
+            <option value="default">Mặc định</option>
+            <option value="price-asc">Giá tăng dần</option>
+            <option value="price-desc">Giá giảm dần</option>
+            <option value="name-asc">Tên A-Z</option>
+          </select>
+        </SortSelect>
+      </FilterSortBar>
+
+      {/* Product Grid */}
       <ProductGrid>
         {products.map((item) => (
           <ProductCardComponent key={item.id} product={item} />

@@ -1,6 +1,12 @@
 import React from "react";
 import ProductCardComponent from "../../components/ProductCardComponent/ProductCardComponent";
-import { PageContainer, Title, ProductGrid, FilterSortBar, FilterGroup, SortSelect } from "./ProductPage.styles";
+import PaginationComponent from "../../components/PaginationComponent/index";
+import { PageContainer, 
+        Title, 
+        ProductGrid, 
+        FilterSortBar, 
+        FilterGroup, 
+        SortSelect } from "./ProductPage.styles";
 
 const ProductPage = () => {
   const products = [
@@ -65,6 +71,8 @@ const ProductPage = () => {
           <ProductCardComponent key={item.id} product={item} />
         ))}
       </ProductGrid>
+
+      <PaginationComponent total={48} pageSize={12} />
     </PageContainer>
   );
 };

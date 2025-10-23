@@ -1,17 +1,18 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import HeaderComponent from "../../components/HeaderComponent/HeaderComponent";
+import HeaderComponent from "../../components/HeaderComponent/index";
 import FooterComponent from "../../components/FooterComponent/FooterComponent";
+import { MainLayoutWrapper } from "./styles";
 
 function MainLayout({ isShowHeader = true, isShowFooter = true }) {
   return (
-    <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
+    <MainLayoutWrapper >
       { isShowHeader && <HeaderComponent />}
       <main>
         <Outlet />
       </main>
       { isShowFooter && <FooterComponent />}
-    </div>
+    </MainLayoutWrapper>
   );
 }
 

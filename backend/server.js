@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
-import cosmeticsRouter from './api/cosmetics.route.js';
+import routes from './routes/index.js';
+
 const app = express();
 
 // Middleware
@@ -8,7 +9,7 @@ app.use(cors());
 app.use(express.json());
 
 // Route
-app.use('/api/v1/cosmetics', cosmeticsRouter);
+routes(app);
 
 // 404 handler
 app.use((req, res) => {

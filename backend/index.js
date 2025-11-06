@@ -1,6 +1,7 @@
 import app from "./server.js";
 import mongodb from "mongodb";
 import dotenv from "dotenv";
+import CosmeticsDAO from "./dao/cosmecticsDAO.js";
 
 async function main() {
     dotenv.config();
@@ -14,6 +15,8 @@ async function main() {
 
     try {
         await client.connect();
+        await CosmeticsDAO.injectDB(client);
+        
         console.log("Connected to MongoDB");
 
         app.listen(port, () => {

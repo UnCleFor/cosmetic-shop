@@ -1,10 +1,12 @@
 import express from 'express';
-// const cosmeticsController = require('./cosmetics.controller');
+import CosmeticsController from '../controllers/cosmetics.controller.js';
 
 const router = express.Router();
 
 //demo thử
-router.route('/').get((req, res) => {res.send('Hello from cosmetics route!');});
+router.route('/').get((req, res) => {
+    res.json({ message: "Hello from cosmetics route!" });
+});
 // router.get("/", (req, res) => {
 //     res.json({ message: "Hello from cosmetics route!" });
 // });

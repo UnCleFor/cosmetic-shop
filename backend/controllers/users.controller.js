@@ -1,76 +1,56 @@
-import UsersDAO from "../dao/usersDAO.js";
+import UserService from "../services/user.service.js";
 
-export default class UserController {
-    // Tạo người dùng mới
+class UsersController {
+
+    // Tạo user
     static async createUser(req, res) {
         try {
             const {
                 name,
                 email,
                 password,
-                admin,
+                isAdmin,
                 phone,
-                avatar,
-                address
+                avatar
             } = req.body;
 
-            const newUser = await UsersDAO.createUser({
+            const user = await UserService.createUser({
                 name,
                 email,
                 password,
-                admin: admin ?? false,
+                role: isAdmin ? "admin" : "user",
                 phone,
-                avatar,
-                address,
+                avatar
             });
 
-            // Không trả password
-            newUser.password = undefined;
-
-            return res.status(201).json({
-                message: "Tạo người dùng thành công",
-                user: newUser,
+            res.status(201).json({
+                message: "User created successfully",
+                user,
             });
-
         } catch (err) {
-            if (err.code === 11000) {
-                return res.status(400).json({
-                    error: "Email đã tồn tại"
-                });
-            }
-
-            console.error(err);
-            return res.status(500).json({
-                error: "Lỗi server"
+            res.status(400).json({
+                message: "Cannot create user",
+                error: err.message,
             });
         }
     }
 
-    // Lấy danh sách user (hỗ trợ filter)
+    // Lấy tất cả user
     static async getUsers(req, res) {
         try {
-            const filters = {
-                email: req.query.email,
-                name: req.query.name,
-                admin: req.query.admin,
-            };
+            const users = await UserService.getUsers();
 
-            const {
-                usersList,
-                count
-            } = await UsersDAO.getUsers(filters);
-
-            let response = {
-                users: usersList,
-                total_results: count,
-            };
-
-            return res.status(200).json(response);
+            res.status(200).json({
+                count: users.length,
+                users,
+            });
         } catch (err) {
-            console.error(err);
-            return res.status(500).json({
-                error: "Lỗi server"
+            res.status(500).json({
+                message: "Cannot fetch users",
+                error: err.message,
             });
         }
     }
 }
+
+export default UsersController;

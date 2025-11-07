@@ -1,31 +1,26 @@
 import app from "./server.js";
-import mongodb from "mongodb";
+import mongoose from "mongoose";
 import dotenv from "dotenv";
-import CosmeticsDAO from "./dao/cosmecticsDAO.js";
+
+dotenv.config();
+
+const PORT = process.env.PORT || 3000;
 
 async function main() {
-    dotenv.config();
-
-    const client = new mongodb.MongoClient(process.env.COSMETIC_DB_URL, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    });
-
-    const port = process.env.PORT || 8000;
-
     try {
-        await client.connect();
-        await CosmeticsDAO.injectDB(client);
-        
-        console.log("Connected to MongoDB");
-
-        app.listen(port, () => {
-            console.log(`Server is running on port ${port}`);
+        await mongoose.connect(process.env.COSMETIC_DB_URL, {
+            dbName: process.env.COSMETIC_DB_NAME,
         });
-    } catch (error) {
-        console.error("Error connecting to MongoDB:", error);
+
+        console.log("Connected to MongoDB with Mongoose");
+
+        app.listen(PORT, () => {
+            console.log(`Server running on port ${PORT}`);
+        });
+    } catch (err) {
+        console.error("Cannot connect to MongoDB:", err);
         process.exit(1);
     }
 }
 
-main().catch(console.error);
+main();

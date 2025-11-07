@@ -23,9 +23,10 @@ const userSchema = new mongoose.Schema({
         select: false, // Không trả về password trong response
     },
 
-    admin: {
-        type: Boolean,
-        default: false,
+    role: {
+        type: String,
+        enum: ["user", "admin"],
+        default: "user"
     },
 
     phone: {
@@ -41,7 +42,7 @@ const userSchema = new mongoose.Schema({
     timestamps: true
 });
 
-// ✅ Hash mật khẩu trước khi lưu
+// Hash mật khẩu trước khi lưu
 userSchema.pre("save", async function (next) {
     // Nếu mật khẩu không thay đổi → bỏ qua
     if (!this.isModified("password")) return next();
@@ -51,7 +52,7 @@ userSchema.pre("save", async function (next) {
     next();
 });
 
-// ✅ So sánh mật khẩu khi login
+// So sánh mật khẩu khi login
 userSchema.methods.comparePassword = async function (password) {
     return await bcrypt.compare(password, this.password);
 };

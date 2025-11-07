@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
 import slugify from "slugify";
 
-const productSchema = new mongoose.Schema({
+const cosmeticSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: [true, "Tên sản phẩm không được để trống"],
+        required: [true, "Tên mỹ phẩm không được để trống"],
         trim: true,
     },
 
@@ -61,7 +61,7 @@ const productSchema = new mongoose.Schema({
     },
 
     images: [{
-        type: String, // link ảnh
+        type: String,
     }],
 
     rating: {
@@ -75,11 +75,13 @@ const productSchema = new mongoose.Schema({
         type: Number,
         default: 0,
     }
+
 }, {
     timestamps: true
 });
 
-productSchema.pre("save", function (next) {
+//  Tự tạo slug từ name
+cosmeticSchema.pre("save", function (next) {
     if (!this.isModified("name")) return next();
     this.slug = slugify(this.name, {
         lower: true
@@ -87,5 +89,5 @@ productSchema.pre("save", function (next) {
     next();
 });
 
-const Product = mongoose.model("Product", productSchema);
-export default Product;
+const Cosmetic = mongoose.model("Cosmetic", cosmeticSchema);
+export default Cosmetic;

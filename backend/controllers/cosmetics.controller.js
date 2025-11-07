@@ -1,44 +1,44 @@
-import CosmeticsDAO from "../dao/cosmecticsDAO.js";
+import CosmeticService from "../services/cosmetic.service.js";
 
-export default class CosmeticsController {
+class CosmeticsController {
 
-    static async apiGetCosmetics(req, res, next) {
-        const cosmeticsPerPage = req.query.limit ? Number(req.query.limit) : 20;
-        const page = req.query.page ? Number(req.query.page) - 1 : 0;
+    // Tạo mỹ phẩm
+    static async createCosmetic(req, res) {
+        try {
+            const cosmetic = await CosmeticService.createCosmetic(req.body);
 
-        const filters = {};
-        if (req.query.name) filters.name = req.query.name;
-        if (req.query.brand) filters.brand = req.query.brand;
-        if (req.query.category) filters.category = req.query.category;
-        if (req.query.minPrice) filters.minPrice = req.query.minPrice;
-        if (req.query.maxPrice) filters.maxPrice = req.query.maxPrice;
+            res.status(201).json({
+                message: "Cosmetic created successfully",
+                cosmetic,
+            });
 
-        const sort = req.query.sort || null;
+        } catch (err) {
+            res.status(400).json({
+                message: "Cannot create cosmetic",
+                error: err.message,
+            });
+        }
+    }
 
-        const {
-            cosmeticsList,
-            totalNumCosmetics
-        } =
-        await CosmeticsDAO.getCosmetics({
-            filters,
-            page,
-            cosmeticsPerPage,
-            sort
-        });
+    // Lấy danh sách mỹ phẩm
+    static async getCosmetics(req, res) {
+        try {
+            const filters = req.query;
 
-        let response = {
-            cosmetics: cosmeticsList,
-            page: page + 1,
-            filters: filters,
-            entries_per_page: cosmeticsPerPage,
-            total_results: totalNumCosmetics,
-        };
+            const cosmetics = await CosmeticService.getCosmetics(filters);
 
-        res.json(response);
-    } catch (err) {
-        console.error(err);
-        return res.status(500).json({
-            error: "Lỗi server"
-        });
+            res.status(200).json({
+                count: cosmetics.length,
+                cosmetics,
+            });
+
+        } catch (err) {
+            res.status(500).json({
+                message: "Cannot fetch cosmetics",
+                error: err.message,
+            });
+        }
     }
 }
+
+export default CosmeticsController;

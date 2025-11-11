@@ -6,6 +6,8 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: [true, "Tên không được để trống"],
         trim: true,
+        minlength: [2, "Tên quá ngắn"],
+        maxlength: [50, "Tên quá dài"],
     },
 
     email: {
@@ -14,6 +16,7 @@ const userSchema = new mongoose.Schema({
         unique: true,
         lowercase: true,
         trim: true,
+        match: [/^\S+@\S+\.\S+$/, "Định dạng email không hợp lệ"],
     },
 
     password: {

@@ -12,6 +12,11 @@ class UserService {
         const users = await User.find().select("-password");
         return users;
     }
+
+    // Tìm user theo email
+    static async findByEmail(email) {
+        return await User.findOne({ email });
+    }
 }
 
 export default UserService;

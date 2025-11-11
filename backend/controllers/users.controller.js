@@ -14,6 +14,40 @@ class UsersController {
                 avatar
             } = req.body;
 
+            // Kiểm tra bắt buộc
+            if (!name || !email || !password || !confirmPassword) {
+                return res.status(400).json({ message: "Vui lòng điền đầy đủ thông tin bắt buộc" });
+            }
+
+            // Xác nhận mật khẩu
+            if (password !== confirmPassword) {
+                return res.status(400).json({ message: "Mật khẩu xác nhận không trùng khớp" });
+            }
+
+            // Kiểm tra độ mạnh mật khẩu
+            const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*()_+=-]{6,}$/;
+            if (!passwordRegex.test(password)) {
+                return res.status(400).json({
+                    message: "Mật khẩu phải có ít nhất 6 ký tự, bao gồm chữ và số",
+                });
+            }
+
+            // Kiểm tra định dạng số điện thoại
+            if (phone && !/^(0|\+84)[0-9]{9}$/.test(phone)) {
+                return res.status(400).json({
+                    message: "Số điện thoại không hợp lệ",
+                });
+            }
+
+            // Kiểm tra email đã tồn tại
+            const existingUser = await UserService.findByEmail(email);
+            if (existingUser) {
+                return res.status(400).json({
+                    message: "Email đã được sử dụng",
+                });
+            }
+
+
             const user = await UserService.createUser({
                 name,
                 email,
@@ -23,13 +57,21 @@ class UsersController {
                 avatar
             });
 
+            // Ẩn password khi trả về
+            user.password = undefined;
+
             res.status(201).json({
-                message: "User created successfully",
+                message: "Tạo người dùng thành công",
                 user,
             });
         } catch (err) {
+            if (err.code === 11000) {
+                return res.status(400).json({
+                    message: "Email đã tồn tại trong hệ thống",
+                });
+            }
             res.status(400).json({
-                message: "Cannot create user",
+                message: "Không thể tạo người dùng",
                 error: err.message,
             });
         }
@@ -46,7 +88,7 @@ class UsersController {
             });
         } catch (err) {
             res.status(500).json({
-                message: "Cannot fetch users",
+                message: "Không thể lấy danh sách người dùng",
                 error: err.message,
             });
         }

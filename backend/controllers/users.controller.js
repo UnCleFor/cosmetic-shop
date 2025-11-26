@@ -9,6 +9,7 @@ class UsersController {
                 name,
                 email,
                 password,
+                confirmPassword,
                 isAdmin,
                 phone,
                 avatar
@@ -47,7 +48,6 @@ class UsersController {
                 });
             }
 
-
             const user = await UserService.createUser({
                 name,
                 email,
@@ -58,11 +58,19 @@ class UsersController {
             });
 
             // Ẩn password khi trả về
-            user.password = undefined;
-
+            const userResponse = {
+                _id: user._id,
+                name: user.name,
+                email: user.email,
+                role: user.role,
+                phone: user.phone,
+                avatar: user.avatar,
+                createdAt: user.createdAt,
+                updatedAt: user.updatedAt
+            };
             res.status(201).json({
                 message: "Tạo người dùng thành công",
-                user,
+                user: userResponse,
             });
         } catch (err) {
             if (err.code === 11000) {
@@ -73,6 +81,29 @@ class UsersController {
             res.status(400).json({
                 message: "Không thể tạo người dùng",
                 error: err.message,
+            });
+        }
+    }
+
+    static async loginUser(req, res) {
+        try {
+            const { email, password } = req.body;
+
+            // Gọi service để xử lý đăng nhập
+            const result = await UserService.loginUser({ email, password });
+
+            // Trả về kết quả thành công
+            res.status(200).json({
+                success: true,
+                message: "Đăng nhập thành công",
+                data: result
+            });
+
+        } catch (error) {
+            // Xử lý lỗi
+            res.status(400).json({
+                success: false,
+                message: error.message
             });
         }
     }
@@ -90,6 +121,83 @@ class UsersController {
             res.status(500).json({
                 message: "Không thể lấy danh sách người dùng",
                 error: err.message,
+            });
+        }
+    }
+
+    static async getDetail(req, res) {
+        try {
+            const { id } = req.params;
+            // Validate ID
+            if (!id) {
+                return res.status(400).json({
+                    success: false,
+                    message: "ID user là bắt buộc"
+                });
+            }
+
+            const user = await UserService.getDetail(id);
+
+            res.status(200).json({
+                success: true,
+                message: "Lấy thông tin user thành công",
+                data: user
+            });
+
+        } catch (error) {
+            if (error.message.includes("Không tìm thấy")) {
+                return res.status(404).json({
+                    success: false,
+                    message: error.message
+                });
+            }
+
+            res.status(500).json({
+                success: false,
+                message: error.message
+            });
+        }
+    }
+
+    // Cập nhật thông tin user (cho admin)
+    static async updateUser(req, res) {
+        try {
+            const { id } = req.params;
+            const updateData = req.body;
+
+            // Gọi service để cập nhật user
+            const updatedUser = await UserService.updateUser(id, updateData);
+
+            res.status(200).json({
+                success: true,
+                message: "Cập nhật user thành công",
+                data: updatedUser
+            });
+
+        } catch (error) {
+            res.status(400).json({
+                success: false,
+                message: error.message
+            });
+        }
+    }
+
+    // Xóa user (admin only)
+    static async deleteUser(req, res) {
+        try {
+            const { id } = req.params;
+
+            const result = await UserService.deleteUser(id);
+
+            res.status(200).json({
+                success: true,
+                message: result.message
+            });
+
+        } catch (error) {
+            res.status(400).json({
+                success: false,
+                message: error.message
             });
         }
     }

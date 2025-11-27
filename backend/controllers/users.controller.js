@@ -1,5 +1,5 @@
 import UserService from "../services/user.service.js";
-
+import JwtService from "../services/jwt.service.js";
 class UsersController {
 
     // Tạo user
@@ -128,11 +128,22 @@ class UsersController {
     static async getDetail(req, res) {
         try {
             const { id } = req.params;
+            const currentUser = req.user; // Lấy từ middleware requireUser
+
             // Validate ID
             if (!id) {
                 return res.status(400).json({
                     success: false,
                     message: "ID user là bắt buộc"
+                });
+            }
+
+            // Kiểm tra quyền truy cập
+            // Admin có thể xem mọi user, user chỉ xem được chính mình
+            if (currentUser.role !== 'admin' && currentUser._id.toString() !== id) {
+                return res.status(403).json({
+                    success: false,
+                    message: "Bạn chỉ có quyền xem thông tin của chính mình"
                 });
             }
 
@@ -145,6 +156,8 @@ class UsersController {
             });
 
         } catch (error) {
+            console.error(`💥 Get detail error: ${error.message}`);
+
             if (error.message.includes("Không tìm thấy")) {
                 return res.status(404).json({
                     success: false,
@@ -201,6 +214,55 @@ class UsersController {
             });
         }
     }
-}
 
+    static async generateAccessToken(req, res) {
+        try {
+            console.log('🔄 Refresh token request received');
+
+            // Lấy refresh token từ headers (giống cách bạn đang dùng)
+            const refreshToken = req.headers.token?.split(' ')[1]
+
+            console.log('📨 Refresh token from headers:', refreshToken ? '✓ Present' : '✗ Missing');
+
+            // Kiểm tra refresh token có được cung cấp không
+            if (!refreshToken) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Refresh token là bắt buộc. Gửi trong header: Authorization: Bearer <refreshToken>"
+                });
+            }
+
+            // Gọi JwtService để tạo access token mới
+            const result = JwtService.refreshToken(refreshToken);
+
+            console.log('✅ New access token generated for user:', result.user.email);
+
+            res.status(200).json({
+                success: true,
+                message: "Tạo access token mới thành công",
+                data: {
+                    accessToken: result.accessToken,
+                    user: result.user
+                }
+            });
+
+        } catch (error) {
+            console.error('❌ Generate access token error:', error.message);
+
+            // Xử lý các loại lỗi cụ thể
+            if (error.message.includes('Refresh token không hợp lệ') ||
+                error.message.includes('Không thể refresh token')) {
+                return res.status(401).json({
+                    success: false,
+                    message: "Refresh token không hợp lệ hoặc đã hết hạn. Vui lòng đăng nhập lại."
+                });
+            }
+
+            res.status(500).json({
+                success: false,
+                message: "Lỗi server khi tạo token mới: " + error.message
+            });
+        }
+    }
+}
 export default UsersController;

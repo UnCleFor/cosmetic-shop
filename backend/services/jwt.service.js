@@ -17,7 +17,7 @@ class JwtService {
     static generateRefreshToken(payload, expiresIn = '7d') {
         return jwt.sign(
             payload,
-            process.env.JWT_REFRESH_SECRET || 'your-refresh-secret-key',
+            process.env.REFRESH_TOKEN,
             { expiresIn }
         );
     }
@@ -25,7 +25,7 @@ class JwtService {
     // Xác thực access token
     static verifyAccessToken(token) {
         try {
-            return jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key');
+            return jwt.verify(token, process.env.ACCESS_TOKEN);
         } catch (error) {
             throw new Error('Token không hợp lệ hoặc đã hết hạn');
         }
@@ -34,7 +34,7 @@ class JwtService {
     // Xác thực refresh token
     static verifyRefreshToken(token) {
         try {
-            return jwt.verify(token, process.env.JWT_REFRESH_SECRET || 'your-refresh-secret-key');
+            return jwt.verify(token, process.env.REFRESH_TOKEN);
         } catch (error) {
             throw new Error('Refresh token không hợp lệ');
         }
@@ -53,7 +53,7 @@ class JwtService {
             role: user.role
         };
 
-        const accessToken = this.generateAccessToken(payload, '15m'); // 15 phút
+        const accessToken = this.generateAccessToken(payload, '10m'); // 10 phút
         const refreshToken = this.generateRefreshToken(payload, '7d'); // 7 ngày
 
         return {
@@ -61,7 +61,6 @@ class JwtService {
             refreshToken
         };
     }
-
     // Refresh token mới
     static refreshToken(oldRefreshToken) {
         try {

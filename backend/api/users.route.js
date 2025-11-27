@@ -22,6 +22,10 @@ router
     .get(authMiddleware.requireAdmin, UserController.getUsers);
 router
     .route('/get-detail/:id')
-    .get(authMiddleware.requireAdmin, UserController.getDetail);
+    .get(authMiddleware.requireUser, UserController.getDetail);
+router
+    .route('/refresh-token')
+    .post(UserController.generateAccessToken);
+
 
 export default router;

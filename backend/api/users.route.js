@@ -5,7 +5,7 @@ import authMiddleware from '../middleware/authMiddleware.js';
 const router = express.Router();
 
 router
-    .route('/sign-up')
+    .route('/sign-up') // Hàm đăng nhập
     .get(UserController.getUsers)
     .post(UserController.createUser);
 router

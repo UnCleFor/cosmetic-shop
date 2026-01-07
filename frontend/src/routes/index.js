@@ -7,7 +7,6 @@ import ProductDetailPage from "../pages/ProductDetailPage/index";
 import SignInPage from "../pages/SignInpage/SignInPage";
 import SignUpPage from "../pages/SignUpPage/SignUpPage";
 import CartPage from "../pages/CartPage/CartPage";
-import AuthPage from "../pages/AuthPage/AuthPage";
 import AdminPage from "../pages/AdminPage/AdminPage";
 
 const routes = [
@@ -20,24 +19,12 @@ const routes = [
       { path: "productdetail", element: <ProductDetailPage /> },
       { path: "order", element: <OrderPage /> },
       { path: "cart", element: <CartPage /> },
-      { path: "auth", element: <AuthPage /> },
       { path: "admin", element: <AdminPage /> },
     ],
   },
-  {
-    path: "/signin",
-    element: <MainLayout isShowHeader={false} isShowFooter={false} />,
-    children: [
-      { index: true, element: <SignInPage /> },
-    ],
-  },
-  {
-    path: "/signup",
-    element: <MainLayout isShowHeader={false} isShowFooter={false} />,
-    children: [
-      { index: true, element: <SignUpPage /> },
-    ],
-  },
+
+  { path: "/sign-in", element: <SignInPage /> },
+  { path: "/sign-up", element: <SignUpPage /> },
   { path: "*", element: <NotFoundPage /> }
 ];
 

@@ -27,12 +27,12 @@ function HeaderComponent() {
 
   // Chuyển hướng đến trang đăng nhập
   const handleLoginRedirect = () => {
-    window.location.href = "/login";
+    window.location.href = "/sign-in";
   };
 
   // Chuyển hướng đến trang đăng ký
   const handleRegisterRedirect = () => {
-    window.location.href = "/register";
+    window.location.href = "/sign-up";
   };
 
   // Chuyển hướng đến trang tài khoản
@@ -95,7 +95,7 @@ function HeaderComponent() {
                   <li onClick={handleOrdersRedirect}>
                     <ShoppingOutlined /> Đơn hàng
                   </li>
-                  <li className="divider"></li>
+<li className="divider"></li>
                   <li onClick={handleLogout}>
                     <LogoutOutlined /> Đăng xuất
                   </li>
@@ -184,7 +184,7 @@ function HeaderComponent() {
                 <>
                   <Button
                     block
-                    type="default"
+type="default"
                     onClick={() => {
                       handleLoginRedirect();
                       setIsMobileMenuOpen(false);

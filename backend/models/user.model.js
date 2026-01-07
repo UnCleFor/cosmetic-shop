@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: [true, "Mật khẩu không được để trống"],
         minlength: [6, "Mật khẩu ít nhất 6 kí tự"],
-        select: false, // Không trả về password trong response
+        select: false,
     },
 
     role: {

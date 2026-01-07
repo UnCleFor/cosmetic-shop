@@ -9,7 +9,7 @@ class CosmeticService {
     }
 
     // Lấy danh sách mỹ phẩm với filter đơn giản
-    static async getCosmetics({ filters = {}, page = 1, limit = 10, sort = {} }) {
+    static async getCosmetics({ filters = {}, page = 1, limit = 8, sort = {} }) {
         const query = {};
 
         // Filter

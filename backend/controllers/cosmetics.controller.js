@@ -24,7 +24,7 @@ class CosmeticsController {
         try {
             const {
                 page = 1,
-                limit = 10,
+                limit = 8,
                 sortBy = "name",
                 order = "asc",
                 ...filters

@@ -1,0 +1,96 @@
+/* NavComponent.css */
+.nav-component {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  flex: 1;
+  justify-content: center; /* Căn giữa */
+}
+
+.nav-component a {
+  color: #333;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 16px;
+  transition: color 0.3s;
+  padding: 5px 0;
+  position: relative;
+}
+
+.nav-component a:hover {
+  color: var(--color-primary, #E15404);
+}
+
+.nav-component a:hover::after {
+  width: 100%;
+  opacity: 1;
+}
+
+.nav-component a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: var(--color-primary, #E15404);
+  transition: all 0.3s;
+  opacity: 0;
+}
+
+/* Responsive cho mobile */
+@media (max-width: 768px) {
+  .nav-component.mobile {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    width: 100%;
+    justify-content: flex-start; /* Reset căn giữa trên mobile */
+  }
+  
+  .nav-component.mobile a {
+    width: 100%;
+    padding: 15px 20px;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 16px;
+  }
+  
+  .nav-component.mobile a:last-child {
+    border-bottom: none;
+  }
+  
+  .nav-component.mobile a:hover {
+    background-color: rgba(225, 84, 4, 0.05);
+    color: var(--color-primary, #E15404);
+  }
+  
+  .nav-component.mobile a:hover::after {
+    width: 4px;
+    height: 100%;
+    left: 0;
+    bottom: 0;
+  }
+  
+  .nav-component.mobile a::after {
+    width: 4px;
+    height: 0;
+    left: 0;
+    bottom: 0;
+  }
+  
+  /* Ẩn desktop nav trên mobile */
+  .nav-component.desktop {
+    display: none;
+  }
+}
+
+/* Hiển thị desktop nav trên màn hình lớn */
+@media (min-width: 769px) {
+  .nav-component.desktop {
+    display: flex;
+  }
+  
+  .nav-component.mobile {
+    display: none;
+  }
+}

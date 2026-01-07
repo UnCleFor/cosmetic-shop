@@ -1,0 +1,9 @@
+:root {
+  /* Colors */
+  --color-primary: #E15404;
+  --color-primary-dark: #C14703;
+  --color-price: #E15404;
+
+  /* Box shadows */
+  --shadow-primary: 0 0 3px rgba(225, 84, 4, 0.15);
+}

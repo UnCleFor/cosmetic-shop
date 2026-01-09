@@ -8,7 +8,7 @@ import {
   SectionTitle, 
   InfoList, 
   InfoItem 
- } from "./styles";
+ } from "./ProductDetailPage";
 import ButtonComponent from "../../components/ButtonComponent/ButtonComponent";
 import ProductImageComponent from "../../components/ProductImageComponent/index";
 import ProductCardComponent from "../../components/ProductCardComponent/ProductCardComponent";
@@ -89,6 +89,6 @@ const ProductDetailPage = () => {
       </Row>
     </ProductContainer>
   );
-};
+}
 
 export default ProductDetailPage;

@@ -1,13 +1,16 @@
+import MainLayout from "../layouts/MainLayout";
 import HomePage from "../pages/HomePage/HomePage";
 import ProductPage from "../pages/ProductPage/ProductPage";
-import OrderPage from "../pages/OrderPage/OrderPage";
-import NotFoundPage from "../pages/NotFoundPage/NotFoundPage";
-import MainLayout from "../layouts/MainLayout/index";
-import ProductDetailPage from "../pages/ProductDetailPage/index";
-import SignInPage from "../pages/SignInpage/SignInPage";
-import SignUpPage from "../pages/SignUpPage/SignUpPage";
 import CartPage from "../pages/CartPage/CartPage";
 import AdminPage from "../pages/AdminPage/AdminPage";
+import ProfilePage from "../pages/ProfilePage/ProfilePage";
+import SignInPage from "../pages/SignInpage/SignInPage";
+import SignUpPage from "../pages/SignUpPage/SignUpPage";
+import OrderPage from "../pages/OrderPage/OrderPage"
+import ProductDetailPage from "../pages/ProductDetailPage/ProductDetailPage"
+import NotFoundPage from "../pages/NotFoundPage/NotFoundPage";
+import ProtectedRoute from "../components/ProtectedRoute/ProtectedRoute";
+import RoleBasedRoute from "../components/RoleBasedRoute/RoleBasedRoute";
 
 const routes = [
   {
@@ -15,17 +18,47 @@ const routes = [
     element: <MainLayout />,
     children: [
       { index: true, element: <HomePage /> },
-      { path: "product", element: <ProductPage /> },
-      { path: "productdetail", element: <ProductDetailPage /> },
-      { path: "order", element: <OrderPage /> },
-      { path: "cart", element: <CartPage /> },
-      { path: "admin", element: <AdminPage /> },
+      { path: "products", element: <ProductPage /> },
+      // { path: "product-detail", element: <ProductDetailPage /> },
+      {
+        path: "cart",
+        element: (
+          <ProtectedRoute>
+            <CartPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "orders",
+        element: (
+          <ProtectedRoute>
+            <OrderPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "profile",
+        element: (
+          <ProtectedRoute>
+            <ProfilePage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "admin",
+        element: (
+          <RoleBasedRoute requiredRole="admin">
+            <AdminPage />
+          </RoleBasedRoute>
+        ),
+      },
     ],
   },
 
   { path: "/sign-in", element: <SignInPage /> },
   { path: "/sign-up", element: <SignUpPage /> },
-  { path: "*", element: <NotFoundPage /> }
+
+  { path: "*", element: <NotFoundPage /> },
 ];
 
 export default routes;

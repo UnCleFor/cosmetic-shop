@@ -1,34 +1,85 @@
 import React from "react";
 import { Card } from "antd";
+import { ShoppingCartOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import { CardImage, CardWrapper, CartIcon, Price, CartWrapper } from "./ProductCardComponent.styles";
+import "./ProductCardComponent.css";
 
 const { Meta } = Card;
 
-const ProductCardComponent = ({ product , onAddToCart}) => {
-
+const ProductCardComponent = ({ product, onAddToCart }) => {
   const navigate = useNavigate();
 
   const handleNavigate = () => {
-    navigate(`/productdetail`);
+    navigate(`/product/${product.id || product._id}`);
+  };
+
+  const handleAddToCart = (e) => {
+    e.stopPropagation();
+    onAddToCart && onAddToCart(product);
+  };
+
+  // Hàm format giá tiền: 000.000 ₫
+  const formatPrice = (price) => {
+    return new Intl.NumberFormat('vi-VN').format(price) + ' ₫';
   };
 
   return (
-    <CardWrapper>
+    <div className="product-card-wrapper">
       <Card
         hoverable
-        cover={<CardImage src={product.image} alt={product.name} />}
+        cover={
+          <div className="card-image-container">
+            <img 
+              src={product.images?.[0] || product.image || "/placeholder.jpg"} 
+              alt={product.name} 
+              className="card-image" 
+            />
+            {/* Chỉ hiển thị badge nếu có discount > 0 */}
+            {product.discount > 0 && (
+              <div className="discount-badge">
+                -{product.discount}%
+              </div>
+            )}
+          </div>
+        }
         onClick={handleNavigate}
         actions={[
-          <CartWrapper key="cart" onClick={() => onAddToCart && onAddToCart(product)}>
-            <CartIcon />
-          </CartWrapper>,
+          <div key="cart" className="cart-wrapper" onClick={handleAddToCart}>
+            <ShoppingCartOutlined className="cart-icon" />
+          </div>
         ]}
       >
-        <Meta title={product.name} />
-        <Price>{product.price.toLocaleString()} VNĐ</Price>
+        <Meta 
+          title={<div className="product-name">{product.name}</div>} 
+          description={<div className="product-brand">{product.brand}</div>}
+        />
+        
+        {/* Hiển thị giá */}
+        <div className="price-section">
+          {product.discount > 0 ? (
+            <>
+              <div className="original-price">
+                {formatPrice(product.price)}
+              </div>
+              <div className="current-price">
+                {formatPrice(product.price * (1 - product.discount / 100))}
+              </div>
+            </>
+          ) : (
+            <div className="current-price no-discount">
+              {formatPrice(product.price)}
+            </div>
+          )}
+        </div>
+
+        {/* Chỉ hiển thị sold nếu > 0 */}
+        {product.sold > 0 && (
+          <div className="sold-text">
+            Đã bán: {product.sold.toLocaleString('vi-VN')}
+          </div>
+        )}
       </Card>
-    </CardWrapper>
+    </div>
   );
 };
 

@@ -1,0 +1,154 @@
+.product-slider-container {
+    padding: 0 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 0;
+}
+
+.product-swiper {
+    padding: 20px 0 40px;
+}
+
+.product-swiper .swiper-slide {
+    height: auto;
+}
+
+/* ProductSlider.css - Cập nhật phần navigation */
+.product-slider-container {
+    padding: 0 40px;
+    max-width: 1400px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.product-swiper {
+    padding: 30px 0 50px;
+}
+
+.product-swiper .swiper-button-next,
+.product-swiper .swiper-button-prev {
+    display: none;
+}
+
+/* Custom Navigation Container */
+.slider-navigation {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    transform: translateY(-50%);
+    z-index: 10;
+    pointer-events: none;
+}
+
+/* Custom Navigation Buttons */
+.custom-prev-btn,
+.custom-next-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+    background: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    pointer-events: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 20;
+}
+
+.custom-prev-btn {
+    left: -20px;
+}
+
+.custom-next-btn {
+    right: -20px;
+}
+
+/* Arrow icons */
+.custom-prev-btn::before,
+.custom-next-btn::before {
+    content: '';
+    display: block;
+    width: 10px;
+    height: 10px;
+    border-top: 2px solid var(--color-primary);
+    border-right: 2px solid var(--color-primary);
+    transition: all 0.3s ease;
+}
+
+.custom-prev-btn::before {
+    transform: rotate(-135deg);
+    margin-right: 2px;
+}
+
+.custom-next-btn::before {
+    transform: rotate(45deg);
+    margin-left: 2px;
+}
+
+/* Hover effects */
+.custom-prev-btn:hover,
+.custom-next-btn:hover {
+    background: var(--color-primary);
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 6px 20px rgba(255, 77, 79, 0.3);
+}
+
+.custom-prev-btn:hover::before,
+.custom-next-btn:hover::before {
+    border-color: white;
+}
+
+/* Active state */
+.custom-prev-btn:active,
+.custom-next-btn:active {
+    transform: translateY(-50%) scale(0.95);
+}
+
+/* Disabled state */
+.custom-prev-btn.swiper-button-disabled,
+.custom-next-btn.swiper-button-disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    transform: translateY(-50%);
+}
+
+.custom-prev-btn.swiper-button-disabled:hover,
+.custom-next-btn.swiper-button-disabled:hover {
+    background: white;
+    transform: translateY(-50%);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.custom-prev-btn.swiper-button-disabled:hover::before,
+.custom-next-btn.swiper-button-disabled:hover::before {
+    border-color: var(--color-primary);
+}
+
+.product-swiper .swiper-pagination-bullet {
+    background: #d9d9d9;
+    opacity: 1;
+}
+
+.product-swiper .swiper-pagination-bullet-active {
+    background: var(--color-primary);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .product-slider-container {
+        padding: 0 16px;
+    }
+
+    .product-swiper .swiper-button-next,
+    .product-swiper .swiper-button-prev {
+        display: none;
+    }
+}

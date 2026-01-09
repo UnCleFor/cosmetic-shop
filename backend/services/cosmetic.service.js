@@ -27,7 +27,7 @@ class CosmeticService {
         const skip = (page - 1) * limit;
 
         // Sort 
-        const allowedSortFields = ["price", "createdAt", "name", "rating"]; // Các trường được phép 
+        const allowedSortFields = ["price", "createdAt", "name", "discount", "sold"]; 
         const sortField = allowedSortFields.includes(sort.sortBy)
             ? sort.sortBy
             : "createdAt";

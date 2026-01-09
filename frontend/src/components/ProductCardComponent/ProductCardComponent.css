@@ -1,0 +1,132 @@
+.product-card-wrapper {
+    transition: transform 0.3s ease;
+    height: 100%;
+}
+
+.product-card-wrapper:hover {
+    transform: translateY(-5px);
+}
+
+.product-card-wrapper .ant-card {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px var(--shadow-primary);
+    border: 1px solid #f0f0f0;
+    height: 100%;
+}
+
+/* Ảnh sản phẩm */
+.card-image-container {
+    position: relative;
+}
+
+.card-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+/* Badge giảm giá */
+.discount-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: var(--color-primary);
+    color: white;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+/* Tên sản phẩm */
+.product-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    min-height: 40px;
+    margin-bottom: 4px;
+}
+
+/* Thương hiệu */
+.product-brand {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 8px;
+}
+
+/* Phần giá */
+.price-section {
+    margin-top: 8px;
+}
+
+/* Giá gốc (khi có giảm) */
+.original-price {
+    font-size: 12px;
+    color: #999;
+    text-decoration: line-through;
+}
+
+/* Giá hiện tại */
+.current-price {
+    font-size: 16px;
+    font-weight: bold;
+    color: var(--color-price);
+    line-height: 1.2;
+}
+
+.current-price.no-discount {
+    color: #333;
+    font-size: 16px;
+}
+
+/* Số lượng đã bán */
+.sold-text {
+    font-size: 11px;
+    color: #888;
+    margin-top: 4px;
+}
+
+/* Nút giỏ hàng */
+.cart-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 0;
+    cursor: pointer;
+}
+
+.cart-icon {
+    font-size: 18px;
+    color: #666;
+}
+
+.cart-wrapper:hover .cart-icon {
+    color: var(--color-primary);
+}
+
+/* Responsive cho mobile */
+@media (max-width: 768px) {
+    .card-image {
+        height: 160px;
+    }
+
+    .product-name {
+        font-size: 13px;
+        min-height: 36px;
+    }
+
+    .current-price {
+        font-size: 15px;
+    }
+
+    .discount-badge {
+        font-size: 10px;
+        padding: 1px 5px;
+    }
+}

@@ -37,10 +37,17 @@ const cosmeticSchema = new mongoose.Schema({
         min: 0,
     },
 
-    salePrice: {
+    discount: {
         type: Number,
         min: 0,
-        default: null,
+        max: 100,
+        default: 0,
+    },
+
+    sold: {
+        type: Number,
+        min: 0,
+        default: 0,
     },
 
     stock: {

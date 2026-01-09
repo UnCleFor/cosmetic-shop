@@ -11,18 +11,25 @@ import {
   ShoppingCartOutlined
 } from "@ant-design/icons";
 import { CartContext } from "../../context/CartContext";
+import { userSelector, useDispatch, useSelector } from "react-redux"
+import { logout } from "../../redux/slices/userSlice";
 import "./HeaderComponent.css";
+import SpinnerComponent from "../SpinnerComponent/SpinnerComponent";
 
 function HeaderComponent() {
+  const dispath = useDispatch()
+
+  const { user } = useSelector((state) => state.user);
+  const isAuthenticated = Boolean(user);
+  const [isLoading, setIsLoading] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userInfo, setUserInfo] = useState(null);
   const { cartCount } = useContext(CartContext);
 
   // Xử lý đăng xuất
   const handleLogout = () => {
-    setIsLoggedIn(false);
-    setUserInfo(null);
+    setIsLoading(true)
+    dispath(logout())
+    setIsLoading(false)
   };
 
   // Chuyển hướng đến trang đăng nhập
@@ -45,6 +52,8 @@ function HeaderComponent() {
     window.location.href = "/orders";
   };
 
+
+
   return (
     <>
       <header className="header-wrapper">
@@ -66,62 +75,55 @@ function HeaderComponent() {
         <div className="right-actions">
           <SearchComponent placeholder="Tìm kiếm sản phẩm" />
 
-          {/* Giỏ hàng */}
-          <div className="cart-container">
-            <Badge count={cartCount} size="small" offset={[5, 0]}>
-              <div className="cart-icon">
-                <ShoppingCartOutlined />
+          <SpinnerComponent isLoading={isLoading}>
+            {/* Phần xác thực */}
+            {isAuthenticated ? (
+              // Đã đăng nhập
+              <div className="user-profile">
+                <div className="user-avatar">
+                  {user?.avatar ? (
+                    <img src={user.avatar} alt={user.name} />
+                  ) : (
+                    <UserOutlined />
+                  )}
+                </div>
+                <span className="user-name">{user?.name}</span>
+                <div className="user-dropdown">
+                  <ul>
+                    <li onClick={handleProfileRedirect}>
+                      <UserOutlined /> Thông tin cá nhân
+                    </li>
+                    <li onClick={handleOrdersRedirect}>
+                      <ShoppingOutlined /> Đơn hàng
+                    </li>
+                    <li className="divider"></li>
+                    <li onClick={handleLogout}>
+                      <LogoutOutlined /> Đăng xuất
+                    </li>
+                  </ul>
+                </div>
               </div>
-            </Badge>
-          </div>
-
-          {/* Phần xác thực */}
-          {isLoggedIn ? (
-            // Đã đăng nhập
-            <div className="user-profile">
-              <div className="user-avatar">
-                {userInfo?.avatar ? (
-                  <img src={userInfo.avatar} alt={userInfo.name} />
-                ) : (
-                  <UserOutlined />
-                )}
+            ) : (
+              // Chưa đăng nhập
+              <div className="auth-container">
+                <Button
+                  type="text"
+                  className="login-btn"
+                  onClick={handleLoginRedirect}
+                >
+                  <UserOutlined className="btn-icon" />
+                  Đăng nhập
+                </Button>
+                <Button
+                  type="primary"
+                  className="register-btn"
+                  onClick={handleRegisterRedirect}
+                >
+                  Đăng ký
+                </Button>
               </div>
-              <span className="user-name">{userInfo?.name}</span>
-              <div className="user-dropdown">
-                <ul>
-                  <li onClick={handleProfileRedirect}>
-                    <UserOutlined /> Tài khoản của tôi
-                  </li>
-                  <li onClick={handleOrdersRedirect}>
-                    <ShoppingOutlined /> Đơn hàng
-                  </li>
-<li className="divider"></li>
-                  <li onClick={handleLogout}>
-                    <LogoutOutlined /> Đăng xuất
-                  </li>
-                </ul>
-              </div>
-            </div>
-          ) : (
-            // Chưa đăng nhập
-            <div className="auth-container">
-              <Button
-                type="text"
-                className="login-btn"
-                onClick={handleLoginRedirect}
-              >
-                <UserOutlined className="btn-icon" />
-                Đăng nhập
-              </Button>
-              <Button
-                type="primary"
-                className="register-btn"
-                onClick={handleRegisterRedirect}
-              >
-                Đăng ký
-              </Button>
-            </div>
-          )}
+            )}
+          </SpinnerComponent>
 
           <button
             className="mobile-menu-button"
@@ -131,83 +133,86 @@ function HeaderComponent() {
           </button>
         </div>
 
+
         {/* Mobile menu */}
         {isMobileMenuOpen && (
           <div className="mobile-nav-wrapper">
             <NavComponent className="mobile" />
 
-            <div className="mobile-auth">
-              {isLoggedIn ? (
-                <div className="mobile-user-info">
-                  <div className="mobile-avatar">
-                    {userInfo?.avatar ? (
-                      <img src={userInfo.avatar} alt={userInfo.name} />
-                    ) : (
-                      <UserOutlined />
-                    )}
+            <SpinnerComponent isLoading={isLoading}>
+              <div className="mobile-auth">
+                {isAuthenticated ? (
+                  <div className="mobile-user-info">
+                    <div className="mobile-avatar">
+                      {user?.avatar ? (
+                        <img src={user.avatar} alt={user.name} />
+                      ) : (
+                        <UserOutlined />
+                      )}
+                    </div>
+                    <div>
+                      <p className="mobile-user-name">{user?.name}</p>
+                      <p className="mobile-user-email">{user?.email}</p>
+                    </div>
+                    <div className="mobile-user-actions">
+                      <Button
+                        type="default"
+                        onClick={handleProfileRedirect}
+                        block
+                        className="mobile-profile-btn"
+                        icon={<UserOutlined />}
+                      >
+                        Tài khoản
+                      </Button>
+                      <Button
+                        type="default"
+                        onClick={handleOrdersRedirect}
+                        block
+                        className="mobile-orders-btn"
+                        icon={<ShoppingOutlined />}
+                      >
+                        Đơn hàng
+                      </Button>
+                      <Button
+                        type="default"
+                        onClick={handleLogout}
+                        block
+                        className="mobile-logout-btn"
+                        icon={<LogoutOutlined />}
+                      >
+                        Đăng xuất
+                      </Button>
+                    </div>
                   </div>
-                  <div>
-                    <p className="mobile-user-name">{userInfo?.name}</p>
-                    <p className="mobile-user-email">{userInfo?.email}</p>
-                  </div>
-                  <div className="mobile-user-actions">
+                ) : (
+                  <>
                     <Button
-                      type="default"
-                      onClick={handleProfileRedirect}
                       block
-                      className="mobile-profile-btn"
+                      type="default"
+                      onClick={() => {
+                        handleLoginRedirect();
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="mobile-login-btn"
                       icon={<UserOutlined />}
                     >
-                      Tài khoản
+                      Đăng nhập
                     </Button>
                     <Button
-                      type="default"
-                      onClick={handleOrdersRedirect}
                       block
-                      className="mobile-orders-btn"
-                      icon={<ShoppingOutlined />}
+                      type="primary"
+                      onClick={() => {
+                        handleRegisterRedirect();
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="mobile-register-btn"
                     >
-                      Đơn hàng
+                      Đăng ký
                     </Button>
-                    <Button
-                      type="default"
-                      onClick={handleLogout}
-                      block
-                      className="mobile-logout-btn"
-                      icon={<LogoutOutlined />}
-                    >
-                      Đăng xuất
-                    </Button>
-                  </div>
-                </div>
-              ) : (
-                <>
-                  <Button
-                    block
-type="default"
-                    onClick={() => {
-                      handleLoginRedirect();
-                      setIsMobileMenuOpen(false);
-                    }}
-                    className="mobile-login-btn"
-                    icon={<UserOutlined />}
-                  >
-                    Đăng nhập
-                  </Button>
-                  <Button
-                    block
-                    type="primary"
-                    onClick={() => {
-                      handleRegisterRedirect();
-                      setIsMobileMenuOpen(false);
-                    }}
-                    className="mobile-register-btn"
-                  >
-                    Đăng ký
-                  </Button>
-                </>
-              )}
-            </div>
+                  </>
+                )}
+              </div>
+            </SpinnerComponent>
           </div>
         )}
       </header>

@@ -6,7 +6,6 @@ function NavComponent({ className }) {
     <nav className={`nav-component ${className}`}>
       <a href="/">Trang chủ</a>
       <a href="/product">Sản phẩm</a>
-      <a href="/order">Đơn hàng</a>
       <a href="/about">Về chúng tôi</a>
     </nav>
   );

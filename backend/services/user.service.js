@@ -5,12 +5,6 @@ import JwtService from "./jwt.service.js";
 class UserService {
     static async createUser(data) {
         try {
-            // Mã hóa password trước khi lưu
-            if (data.password) {
-                const saltRounds = 10;
-                data.password = await bcrypt.hash(data.password, saltRounds);
-            }
-
             const user = await User.create(data);
             return user;
         } catch (error) {
@@ -95,7 +89,7 @@ class UserService {
             const result = JwtService.refreshToken(refreshToken);
 
             // Lấy thông tin user mới nhất
-            const user = await this.findById(result.user.userId);
+            const user = await User.findById(result.user.userId);
 
             return {
                 user,

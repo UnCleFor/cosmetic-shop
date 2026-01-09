@@ -1,57 +1,53 @@
-import React, { useState } from 'react';
-import { Form, Input, Button, message, Divider } from 'antd';
-import { 
-  UserOutlined, 
-  LockOutlined, 
-  GoogleOutlined, 
-  FacebookFilled 
-} from '@ant-design/icons';
-import { Link, useNavigate } from 'react-router-dom';
-import './SignInPage.css';
+import React from "react";
+import { Form, Input, Button, message, Divider, Alert } from "antd";
+import {
+  UserOutlined,
+  LockOutlined,
+  GoogleOutlined,
+  FacebookFilled,
+} from "@ant-design/icons";
+import { Link } from "react-router-dom";
+
+import useLogin from "../../hooks/auth/useLogin";
+import SpinnerComponent from "../../components/SpinnerComponent/SpinnerComponent";
+import "./SignInPage.css";
 
 const SignInPage = () => {
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
   const [form] = Form.useForm();
+  const [apiError, setApiError] = React.useState("");
 
-  const handleLogin = async (values) => {
-    setLoading(true);
-    try {
-      console.log('Login values:', values);
-      
-      // Giả lập API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // TODO: Thay thế bằng API thực tế
-      if (values.email && values.password) {
-        message.success('Đăng nhập thành công!');
-        
-        // Lưu thông tin vào localStorage (tạm thời)
-        localStorage.setItem('user', JSON.stringify({
-          name: 'Nguyễn Văn A',
-          email: values.email
-        }));
-        
-        // Chuyển hướng về trang chủ
-        navigate('/');
-      } else {
-        message.error('Vui lòng nhập đầy đủ thông tin!');
+  const loginMutation = useLogin({
+    onSuccess: (data) => {
+      if (data.message) {
+        message.success(data.message);
       }
-    } catch (error) {
-      message.error('Đăng nhập thất bại! Vui lòng thử lại.');
-      console.error('Login error:', error);
-    } finally {
-      setLoading(false);
-    }
+    },
+    onError: (error) => {
+      const errorMessage = error.response?.data?.message
+        || error.response?.data?.error
+        || error?.message
+        || "Đăng nhập thất bại! Vui lòng thử lại.";
+
+      setApiError(errorMessage);
+    },
+  });
+
+  const handleLogin = (values) => {
+    setApiError("");
+    loginMutation.mutate(values);
   };
 
   const handleGoogleLogin = () => {
-    message.info('Tính năng đăng nhập bằng Google đang phát triển');
+    message.info("Tính năng đăng nhập bằng Google đang phát triển");
   };
 
   const handleFacebookLogin = () => {
-    message.info('Tính năng đăng nhập bằng Facebook đang phát triển');
+    message.info("Tính năng đăng nhập bằng Facebook đang phát triển");
   };
+
+  if (loginMutation.status === 'pending') {
+    return <SpinnerComponent />;
+  }
 
   return (
     <div className="signin-page">
@@ -60,7 +56,18 @@ const SignInPage = () => {
           <div className="signin-header">
             <h2>Đăng nhập</h2>
           </div>
-          
+
+          {apiError && (
+            <Alert
+              message={apiError}
+              type="error"
+              showIcon
+              closable
+              onClose={() => setApiError("")}
+              style={{ marginBottom: 16 }}
+            />
+          )}
+
           <Form
             form={form}
             onFinish={handleLogin}
@@ -70,25 +77,29 @@ const SignInPage = () => {
             <Form.Item
               name="email"
               rules={[
-                { required: true, message: 'Vui lòng nhập email!' },
-                { type: 'email', message: 'Email không hợp lệ!' }
+                { required: true, message: "Vui lòng nhập email!" },
+                { type: "email", message: "Email không hợp lệ!" },
               ]}
             >
               <Input
                 prefix={<UserOutlined />}
                 placeholder="Email"
                 size="large"
+                disabled={loginMutation.status === 'loading'}
               />
             </Form.Item>
 
             <Form.Item
               name="password"
-              rules={[{ required: true, message: 'Vui lòng nhập mật khẩu!' }]}
+              rules={[
+                { required: true, message: "Vui lòng nhập mật khẩu!" },
+              ]}
             >
               <Input.Password
                 prefix={<LockOutlined />}
                 placeholder="Mật khẩu"
                 size="large"
+                disabled={loginMutation.status === 'loading'}
               />
             </Form.Item>
 
@@ -96,8 +107,8 @@ const SignInPage = () => {
               <Form.Item>
                 <Button
                   type="primary"
-htmlType="submit"
-                  loading={loading}
+                  htmlType="submit"
+                  loading={loginMutation.status === 'loading'}
                   block
                   size="large"
                   className="signin-btn"
@@ -121,6 +132,7 @@ htmlType="submit"
               className="google-btn"
               block
               size="large"
+              disabled={loginMutation.status === 'loading'}
             >
               Google
             </Button>
@@ -130,6 +142,7 @@ htmlType="submit"
               className="facebook-btn"
               block
               size="large"
+              disabled={loginMutation.status === 'loading'}
             >
               Facebook
             </Button>
@@ -137,7 +150,7 @@ htmlType="submit"
 
           <div className="signin-footer">
             <p>
-              Chưa có tài khoản?{' '}
+              Chưa có tài khoản?{" "}
               <Link to="/sign-up" className="sign-up-link">
                 Đăng ký ngay
               </Link>
@@ -147,6 +160,6 @@ htmlType="submit"
       </div>
     </div>
   );
-}
+};
 
 export default SignInPage;

@@ -16,7 +16,7 @@ class UsersController {
             } = req.body;
 
             // Kiểm tra bắt buộc
-            if (!name || !email || !password || !confirmPassword) {
+            if (!name || !email || !password || !confirmPassword || !phone) {
                 return res.status(400).json({ message: "Vui lòng điền đầy đủ thông tin bắt buộc" });
             }
 
@@ -69,7 +69,7 @@ class UsersController {
                 updatedAt: user.updatedAt
             };
             res.status(201).json({
-                message: "Tạo người dùng thành công",
+                message: "Đăng ký thành công",
                 user: userResponse,
             });
         } catch (err) {
@@ -92,11 +92,17 @@ class UsersController {
             // Gọi service để xử lý đăng nhập
             const result = await UserService.loginUser({ email, password });
 
-            // Trả về kết quả thành công
+            const { refreshToken, ...response } = result
+
+            res.cookie('refresh_token', refreshToken, {
+                httpOnly: true,
+                secure: true,
+            })
+
             res.status(200).json({
                 success: true,
                 message: "Đăng nhập thành công",
-                data: result
+                data: response
             });
 
         } catch (error) {
@@ -198,6 +204,40 @@ class UsersController {
             res.status(400).json({
                 success: false,
                 message: error.message
+            });
+        }
+    }
+
+    static async refreshToken(req, res) {
+        try {
+            const refreshToken = req.cookies?.refresh_token;
+
+            // Validate
+            if (!refreshToken) {
+                return res.status(400).json({
+                    message: "Refresh token không được để trống",
+                });
+            }
+
+            // Gọi service
+            const result = await UserService.refreshToken(refreshToken);
+
+            res.cookie("access_token", result.accessToken, {
+                httpOnly: true,
+                secure: true,
+            });
+
+            // Response
+            return res.status(200).json({
+                message: "Refresh token thành công",
+                data: {
+                    user: result.user,
+                    accessToken: result.accessToken,
+                },
+            });
+        } catch (error) {
+            return res.status(401).json({
+                message: error.message || "Refresh token thất bại",
             });
         }
     }

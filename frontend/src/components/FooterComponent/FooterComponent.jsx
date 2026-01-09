@@ -16,7 +16,7 @@ function FooterComponent() {
       <FooterLeft>
         <Logo src="../../assets/images/logo200.jpg" alt="Logo200" />
         <Info>
-          <span>📍 534 Lê thị hồng gấm phường Thái Sơn, Mỹ Tho, Đồng Tháp</span>
+          <span>📍 534 Lê Thị Hồng Gấm phường Thái Sơn, Mỹ Tho, Đồng Tháp</span>
           <span>📞 0342 835 777</span>
           <span>✉️ sarahtrannn299@gmail.com</span>
         </Info>

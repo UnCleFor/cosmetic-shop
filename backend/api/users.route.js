@@ -5,23 +5,21 @@ import authMiddleware from '../middleware/authMiddleware.js';
 const router = express.Router();
 
 router
-    .route('/sign-up') // Hàm đăng nhập
-    .get(UserController.getUsers)
+    .route('/register')
     .post(UserController.createUser);
 router
     .route('/login')
     .post(UserController.loginUser);
 router
-    .route('/update-user/:id')
+    .route('/refresh-token')
+    .post(UserController.refreshToken)
+router
+    .route('/:id')
+    .get(authMiddleware.requireAdmin, UserController.getDetail)
+    .delete(authMiddleware.requireAdmin, UserController.deleteUser)
     .put(UserController.updateUser);
 router
-    .route('/delete-user/:id')
-    .delete(authMiddleware.requireAdmin, UserController.deleteUser);
-router
-    .route('/getAll')
-    .get(authMiddleware.requireAdmin, UserController.getUsers);
-router
-    .route('/get-detail/:id')
-    .get(authMiddleware.requireAdmin, UserController.getDetail);
+    .route('/')
+    .get(authMiddleware.requireAdmin, UserController.getUsers)
 
 export default router;

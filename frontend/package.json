@@ -12,6 +12,7 @@
     "@testing-library/user-event": "^13.5.0",
     "antd": "^5.27.4",
     "axios": "^1.13.2",
+    "dotenv": "^17.2.3",
     "framer-motion": "^12.23.22",
     "lucide-react": "^0.544.0",
     "react": "^19.1.1",
@@ -23,6 +24,7 @@
     "react-scripts": "^5.0.1",
     "react-slick": "^0.31.0",
     "redux": "^5.0.1",
+    "redux-persist": "^6.0.0",
     "slick-carousel": "^1.8.1",
     "styled-components": "^6.1.19",
     "web-vitals": "^2.1.4"

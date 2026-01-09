@@ -1,15 +1,13 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import store from './redux/store';
-import { Provider } from 'react-redux'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import "./styles/global.css"
-import "./styles/theme.css"
-
-const root = ReactDOM.createRoot(document.getElementById('root'));
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
+import App from "./App";
+import { store, persistor } from "./redux/store";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import "./index.css";
+import "./styles/global.css";
+import "./styles/theme.css";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -17,20 +15,19 @@ const queryClient = new QueryClient({
       retry: 1,
       refetchOnWindowFocus: false,
     },
-  },  
+  },
 });
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <QueryClientProvider client={queryClient}>
-        <App />
-      </QueryClientProvider>
+      <PersistGate loading={null} persistor={persistor}>
+        <QueryClientProvider client={queryClient}>
+          <App />
+        </QueryClientProvider>
+      </PersistGate>
     </Provider>
   </React.StrictMode>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();

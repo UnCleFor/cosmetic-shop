@@ -1,0 +1,74 @@
+/* Wrapper cho search component */
+.search-wrapper {
+    width: 100%;
+    max-width: 400px;
+}
+
+/* Styling cho Ant Design Search component */
+.search-wrapper .search-input .ant-input-affix-wrapper {
+    transition: all 0.5s ease;
+    height: 40px;
+}
+
+/* Trạng thái hover, focus, active */
+.search-wrapper .search-input .ant-input-affix-wrapper:hover,
+.search-wrapper .search-input .ant-input-affix-wrapper-focused,
+.search-wrapper .search-input .ant-input-affix-wrapper:focus,
+.search-wrapper .search-input .ant-input-affix-wrapper:active {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 2px rgba(225, 84, 4, 0.1);
+}
+
+/* Input bên trong */
+.search-wrapper .search-input .ant-input {
+    font-size: 14px;
+    padding-left: 12px;
+}
+
+/* Nút tìm kiếm (button) */
+.search-wrapper .search-input .ant-input-search-button {
+    transition: all 0.5s ease;
+    height: 40px;
+    width: 40px;
+}
+
+.search-wrapper .search-input .ant-input-search-button:hover,
+.search-wrapper .search-input .ant-input-search-button:focus {
+    border-color: var(--color-primary);
+    background-color: var(--color-primary);
+}
+
+/* Icon search trong button */
+.search-wrapper .search-input .ant-input-search-button:hover .anticon-search,
+.search-wrapper .search-input .ant-input-search-button:focus .anticon-search {
+    color: white;
+}
+
+/* Clear button */
+.search-wrapper .search-input .ant-input-clear-icon {
+    color: #999;
+}
+
+.search-wrapper .search-input .ant-input-clear-icon:hover {
+    color: var(--color-primary);
+}
+
+/* Responsive - Ẩn trên mobile */
+@media (max-width: 768px) {
+    .search-wrapper {
+        display: none;
+    }
+}
+
+/* Nếu cần hiển thị trên mobile với style khác */
+@media (max-width: 768px) {
+    .search-wrapper.mobile-visible {
+        display: block;
+        max-width: 100%;
+        margin: 10px 0;
+    }
+
+    .search-wrapper.mobile-visible .search-input {
+        width: 100%;
+    }
+}

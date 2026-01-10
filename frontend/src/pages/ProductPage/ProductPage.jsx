@@ -4,27 +4,27 @@ import ProductCardComponent from "../../components/ProductCardComponent/ProductC
 import PaginationComponent from "../../components/PaginationComponent";
 import SpinnerComponent from "../../components/SpinnerComponent/SpinnerComponent";
 import CosmeticsService from "../../services/cosmetics.service";
-
-import {
-  PageContainer,
-  Title,
-  ProductGrid,
-  FilterSortBar,
-  SortSelect
-} from "./ProductPage.styles";
+import { useSearchParams } from "react-router-dom";
+import "./ProductPage.css";
 
 const ProductPage = () => {
   const [page, setPage] = useState(1);
   const [sortBy, setSortBy] = useState("createdAt");
   const [order, setOrder] = useState("asc");
+  const [searchParams] = useSearchParams();
+  const search = searchParams.get("search") || "";
   const limit = 8;
 
-  const queryParams = useMemo(() => ({
-    page,
-    limit,
-    sortBy,
-    order,
-  }), [page, limit, sortBy, order]);
+  const queryParams = useMemo(
+    () => ({
+      page,
+      limit,
+      sortBy,
+      order,
+      ...(search && { search }),
+    }),
+    [page, limit, sortBy, order, search]
+  );
 
   const {
     data,
@@ -41,11 +41,15 @@ const ProductPage = () => {
   const total = data?.total || 0;
 
   return (
-    <PageContainer>
-      <Title>Danh mục sản phẩm</Title>
+    <div className="product-page-container">
+      <h1 className="product-page-title">
+        {search
+          ? `Kết quả tìm kiếm cho "${search}"`
+          : "Danh mục sản phẩm"}
+      </h1>
 
-      <FilterSortBar>
-        <SortSelect>
+      <div className="product-filter-sort-bar">
+        <div className="product-sort-select">
           <label>Sắp xếp:</label>
           <select
             onChange={(e) => {
@@ -69,27 +73,30 @@ const ProductPage = () => {
             <option value="name-asc">Tên A-Z</option>
             <option value="name-desc">Tên Z-A</option>
           </select>
-        </SortSelect>
-      </FilterSortBar>
+        </div>
+      </div>
 
       {isError && (
-        <p style={{ textAlign: "center", color: "red" }}>
+        <p className="product-error-message">
           Không thể tải sản phẩm
         </p>
       )}
 
       <SpinnerComponent isLoading={isFetching}>
-        <ProductGrid style={{ opacity: isFetching ? 0.6 : 1 }}>
+        <div
+          className="product-grid"
+          style={{ opacity: isFetching ? 0.6 : 1 }}
+        >
           {products.map((item) => (
             <ProductCardComponent
               key={item._id}
               product={item}
             />
           ))}
-        </ProductGrid>
+        </div>
 
         {products.length === 0 && (
-          <p style={{ textAlign: "center" }}>
+          <p className="product-empty-message">
             Không có sản phẩm
           </p>
         )}
@@ -101,7 +108,7 @@ const ProductPage = () => {
         current={page}
         onChange={(p) => setPage(p)}
       />
-    </PageContainer>
+    </div>
   );
 };
 

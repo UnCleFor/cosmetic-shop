@@ -8,20 +8,26 @@ class CosmeticService {
         return cosmetic;
     }
 
-    // Lấy danh sách mỹ phẩm với filter đơn giản
+    // Lấy danh sách mỹ phẩm với filter và phân trang
     static async getCosmetics({ filters = {}, page = 1, limit = 8, sort = {} }) {
         const query = {};
 
-        // Filter
-        if (filters.name) {
-            query.name = { $regex: filters.name, $options: "i" };
+        // Search
+        if (filters.search) {
+            query.$or = [
+                { name: { $regex: filters.search, $options: "i" } },
+            ];
         }
+
+        // Filter 
         if (filters.brand) {
             query.brand = filters.brand;
         }
+
         if (filters.category) {
             query.category = filters.category;
         }
+
         if (filters.status) {
             query.status = filters.status;
         }
@@ -29,8 +35,8 @@ class CosmeticService {
         // Pagination
         const skip = (page - 1) * limit;
 
-        // Sort 
-        const allowedSortFields = ["price", "createdAt", "name", "discount", "sold"]; 
+        // Sort
+        const allowedSortFields = ["price", "createdAt", "name", "discount", "sold"];
         const sortField = allowedSortFields.includes(sort.sortBy)
             ? sort.sortBy
             : "createdAt";
@@ -38,7 +44,7 @@ class CosmeticService {
         const sortOrder = sort.order === "asc" ? 1 : -1;
 
         const sortOption = {
-            [sortField]: sortOrder
+            [sortField]: sortOrder,
         };
 
         const [cosmetics, total] = await Promise.all([
@@ -46,14 +52,14 @@ class CosmeticService {
                 .sort(sortOption)
                 .skip(skip)
                 .limit(limit),
-            Cosmetic.countDocuments(query)
+            Cosmetic.countDocuments(query),
         ]);
 
         return {
             total,
             page,
             limit,
-            cosmetics
+            cosmetics,
         };
     }
 

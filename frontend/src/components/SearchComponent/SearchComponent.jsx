@@ -1,19 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 import { Input } from "antd";
-import { SearchWrapper } from "./SearchComponent.styles";
+import { useNavigate } from "react-router-dom";
+import "./SearchComponent.css";
 
 const { Search } = Input;
 
-const SearchComponent = ( props) =>  {
-    const {placeholder} = props;
+const SearchComponent = ({ placeholder }) => {
+    const navigate = useNavigate();
+    const [value, setValue] = useState("");
+
+    const handleSearch = (searchValue) => {
+        if (!searchValue.trim()) return;
+
+        navigate(`/products?search=${encodeURIComponent(searchValue.trim())}`);
+    };
+
     return (
-        <SearchWrapper>
+        <div className="search-wrapper">
             <Search
                 placeholder={placeholder || "Tìm kiếm sản phẩm..."}
                 allowClear
+                className="search-input"
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
+                onSearch={handleSearch}
+                enterButton
             />
-        </SearchWrapper>
+        </div>
     );
-}
+};
 
 export default SearchComponent;

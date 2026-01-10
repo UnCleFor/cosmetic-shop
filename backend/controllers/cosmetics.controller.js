@@ -25,19 +25,24 @@ class CosmeticsController {
             const {
                 page = 1,
                 limit = 8,
-                sortBy = "name",
+                sortBy = "createdAt",
                 order = "asc",
-                ...filters
+                search,
+                brand,
+                category,
+                status,
             } = req.query;
 
             const result = await CosmeticService.getCosmetics({
-                filters,
+                filters: {
+                    search,
+                    brand,
+                    category,
+                    status,
+                },
                 page: Number(page),
                 limit: Number(limit),
-                sort: {
-                    sortBy,
-                    order
-                }
+                sort: { sortBy, order },
             });
 
             res.status(200).json({
@@ -48,7 +53,6 @@ class CosmeticsController {
                 order,
                 cosmetics: result.cosmetics,
             });
-
         } catch (err) {
             res.status(500).json({
                 message: "Cannot fetch cosmetics",

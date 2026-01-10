@@ -1,94 +1,108 @@
 import React, { useContext, useState } from "react";
-import { Row, Col, InputNumber } from "antd";
-import { 
-  ProductContainer, 
-  Title, 
-  Description, 
-  Price, 
-  SectionTitle, 
-  InfoList, 
-  InfoItem 
- } from "./ProductDetailPage";
+import { Row, Col, InputNumber, Tag, Divider } from "antd";
+import { ShoppingCartOutlined, TagOutlined } from "@ant-design/icons";
 import ButtonComponent from "../../components/ButtonComponent/ButtonComponent";
-import ProductImageComponent from "../../components/ProductImageComponent/index";
-import ProductCardComponent from "../../components/ProductCardComponent/ProductCardComponent";
+import ProductImageComponent from "../../components/ProductImageComponent/ProductImageComponent";
 import { CartContext } from "../../context/CartContext";
+import useCosmetic from "../../hooks/cosmetic/useCosmetic";
+import SpinnerComponent from "../../components/SpinnerComponent/SpinnerComponent";
+import "./ProductDetailPage.css";
 
 const ProductDetailPage = () => {
-
+  const { product, isLoading, isError } = useCosmetic();
   const { addToCart } = useContext(CartContext);
   const [quantity, setQuantity] = useState(1);
 
-  const product = {
-    id: 1,
-    name: "Nước hoa Guerlain Mon Paris",
-    brand: "Guerlain",
-    category: "Nước hoa nữ",
-    volume: "50ml",
-    status: "Còn hàng",
-    price: 3200000,
-    image: "./assets/images/sample.png",
-    description:
-      "Hương thơm tinh tế, ngọt ngào và quyến rũ đến từ thương hiệu Guerlain nổi tiếng. Mang lại cảm giác sang trọng và tự tin cho phái đẹp.",
-  };
-
-  // Các sản phẩm liên quan (tính năng dự định sẽ phát triển sau)
-  const relatedProducts = [
-    { id: 2, name: "Son môi Rouge", price: 950000, image: "./assets/images/sample.png" },
-    { id: 3, name: "Kem dưỡng Orchidée", price: 3200000, image: "./assets/images/sample.png" },
-    { id: 4, name: "Phấn nền Luminous", price: 1250000, image: "./assets/images/sample.png" },
-  ];
-
-  const handleAddToCart = () => {
-    addToCart(product, quantity);
-  };
+  if (isError) return <div className="error-message">Không tìm thấy sản phẩm</div>;
+  if (!product) return null;
 
   return (
-    <ProductContainer>
-      <Row gutter={[32, 32]}>
-        <Col xs={24} md={10}>
-          <ProductImageComponent image={product.image} />
-        </Col>
-
-        <Col xs={24} md={14}>
-          <Title>{product.name}</Title>
-          <Price>{product.price.toLocaleString()} VNĐ</Price>
-          <InfoList>
-            <InfoItem><strong>Thương hiệu:</strong> {product.brand}</InfoItem>
-            <InfoItem><strong>Loại sản phẩm:</strong> {product.category}</InfoItem>
-            <InfoItem><strong>Dung tích:</strong> {product.volume}</InfoItem>
-            <InfoItem><strong>Tình trạng:</strong> {product.status}</InfoItem>
-          </InfoList>
-
-          <Description>{product.description}</Description>
-
-          {/* Thanh chọn số lượng */}
-          <div style={{ marginBottom: "2rem" }}>
-            <span style={{ marginRight: 10, fontSize: "1.5rem" }}>Số lượng:</span>
-            <InputNumber
-              min={1}
-              max={10}
-              value={quantity}
-              onChange={(value) => setQuantity(value)}
+    <SpinnerComponent isLoading={isLoading}>
+      <div className="product-detail-container">
+        <Row gutter={[40, 24]}>
+          <Col xs={24} md={12}>
+            <ProductImageComponent
+              images={product.images || product.image}
+              name={product.name}
             />
-          </div>
-
-          <ButtonComponent onClick={handleAddToCart}>
-            Thêm vào giỏ hàng
-          </ButtonComponent>
-        </Col>
-      </Row>
-
-      <SectionTitle>Sản phẩm liên quan</SectionTitle>
-      <Row gutter={[16, 16]}>
-        {relatedProducts.map((item) => (
-          <Col xs={24} sm={12} md={8} key={item.id}>
-            <ProductCardComponent product={item} />
           </Col>
-        ))}
-      </Row>
-    </ProductContainer>
+
+          <Col xs={24} md={12}>
+            <div className="product-info">
+              <Tag color="blue" className="category-tag">
+                <TagOutlined /> {product.category}
+              </Tag>
+
+              <h1 className="product-title">{product.name}</h1>
+              <div className="product-brand">{product.brand}</div>
+
+              <div className="price-section">
+                {product.discount > 0 ? (
+                  <>
+                    <div className="current-price">
+                      {(product.price * (1 - product.discount / 100)).toLocaleString("vi-VN")} ₫
+                    </div>
+                    <div className="original-price">
+                      {product.price.toLocaleString("vi-VN")} ₫
+                    </div>
+                    <div className="discount-tag">-{product.discount}%</div>
+                  </>
+                ) : (
+                  <div className="current-price">
+                    {product.price.toLocaleString("vi-VN")} ₫
+                  </div>
+                )}
+              </div>
+
+              <Divider className="info-divider" />
+
+              <div className="product-description">
+                <h3>Mô tả sản phẩm</h3>
+                <p>{product.description}</p>
+              </div>
+
+              <div className="product-meta">
+                <div className="meta-item">
+                  <strong>Tình trạng:</strong>
+                  <Tag color={product.status === "Còn hàng" ? "green" : "red"}>
+                    {product.status}
+                  </Tag>
+                </div>
+                <div className="meta-item">
+                  <strong>Kho:</strong> {product.stock || "Nhiều"} sản phẩm
+                </div>
+              </div>
+
+              <Divider className="action-divider" />
+
+              <div className="action-section">
+                <div className="quantity-control">
+                  <span className="quantity-label">Số lượng:</span>
+                  <InputNumber
+                    min={1}
+                    max={product.stock || 100}
+                    value={quantity}
+                    onChange={setQuantity}
+                    className="quantity-input"
+                  />
+                </div>
+
+                <ButtonComponent
+                  type="primary"
+                  size="large"
+                  icon={<ShoppingCartOutlined />}
+                  onClick={() => addToCart(product, quantity)}
+                  className="add-to-cart-btn"
+                >
+                  Thêm vào giỏ hàng
+                </ButtonComponent>
+              </div>
+            </div>
+          </Col>
+        </Row>
+      </div>
+    </SpinnerComponent>
   );
-}
+};
 
 export default ProductDetailPage;

@@ -19,7 +19,7 @@ const routes = [
     children: [
       { index: true, element: <HomePage /> },
       { path: "products", element: <ProductPage /> },
-      // { path: "product-detail", element: <ProductDetailPage /> },
+      { path: "product/:id", element: <ProductDetailPage /> },
       {
         path: "cart",
         element: (
@@ -49,11 +49,6 @@ const routes = [
 
   { path: "/sign-in", element: <SignInPage /> },
   { path: "/sign-up", element: <SignUpPage /> },
-
-  {
-    path: "admin",
-
-  },
 
   {
     path: "/admin",

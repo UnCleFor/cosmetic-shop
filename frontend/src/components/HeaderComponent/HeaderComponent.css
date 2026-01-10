@@ -242,8 +242,8 @@
 }
 
 .mobile-logout-btn:hover {
-  border-color: #ff4d4f;
-  color: #ff4d4f;
+  border-color: var(--color-primary);
+  color: var(--color-primary);
 }
 
 /* Mobile Auth */

@@ -1,6 +1,8 @@
 .product-card-wrapper {
     transition: transform 0.3s ease;
     height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .product-card-wrapper:hover {
@@ -10,20 +12,42 @@
 .product-card-wrapper .ant-card {
     border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 2px 8px var(--shadow-primary);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     border: 1px solid #f0f0f0;
     height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
-/* Ảnh sản phẩm */
+/* Đảm bảo card body chiếm hết chiều cao */
+.product-card-wrapper .ant-card-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 12px;
+}
+
+/* Ảnh sản phẩm - FIXED HEIGHT */
 .card-image-container {
     position: relative;
+    width: 100%;
+    padding-top: 75%;
+    /* Tỷ lệ 4:3 (300x225) */
+    overflow: hidden;
 }
 
 .card-image {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
-    height: 200px;
+    height: 100%;
     object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.product-card-wrapper:hover .card-image {
+    transform: scale(1.05);
 }
 
 /* Badge giảm giá */
@@ -31,12 +55,21 @@
     position: absolute;
     top: 8px;
     right: 8px;
-    background: var(--color-primary);
+    background: linear-gradient(135deg, #ff6b6b, #ff4757);
     color: white;
-    padding: 2px 6px;
-    border-radius: 3px;
-    font-size: 11px;
-    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    z-index: 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Nội dung sản phẩm - FIXED LAYOUT */
+.product-card-wrapper .ant-card-meta {
+    flex: 1;
+    margin-bottom: 8px;
+    min-height: 60px;
 }
 
 /* Tên sản phẩm */
@@ -49,20 +82,36 @@
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    min-height: 40px;
+    text-overflow: ellipsis;
+    height: 40px;
     margin-bottom: 4px;
+    transition: color 0.3s ease;
 }
 
-/* Thương hiệu */
+.product-card-wrapper:hover .product-name {
+    color: var(--color-primary);
+}
+
+/* Thương hiệu - Single line ellipsis */
 .product-brand {
     font-size: 12px;
     color: #666;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     margin-bottom: 8px;
+    padding-right: 4px;
 }
 
-/* Phần giá */
+/* Phần giá  */
 .price-section {
-    margin-top: 8px;
+    margin-top: auto;
+    padding: 8px 0;
+    border-top: 1px solid #f0f0f0;
+    min-height: 45px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 /* Giá gốc (khi có giảm) */
@@ -70,19 +119,24 @@
     font-size: 12px;
     color: #999;
     text-decoration: line-through;
+    line-height: 1.2;
 }
 
 /* Giá hiện tại */
 .current-price {
     font-size: 16px;
-    font-weight: bold;
-    color: var(--color-price);
+    font-weight: 700;
+    color: var(--color-primary);
     line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .current-price.no-discount {
     color: #333;
     font-size: 16px;
+    font-weight: 600;
 }
 
 /* Số lượng đã bán */
@@ -90,6 +144,9 @@
     font-size: 11px;
     color: #888;
     margin-top: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /* Nút giỏ hàng */
@@ -97,28 +154,37 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 8px 0;
+    padding: 12px 0;
     cursor: pointer;
+    border-top: 1px solid #f0f0f0;
+    background-color: #fafafa;
+    transition: all 0.3s ease;
+}
+
+.cart-wrapper:hover {
+    background-color: var(--color-primary);
 }
 
 .cart-icon {
     font-size: 18px;
     color: #666;
+    transition: all 0.3s ease;
 }
 
 .cart-wrapper:hover .cart-icon {
-    color: var(--color-primary);
+    color: white;
 }
 
 /* Responsive cho mobile */
 @media (max-width: 768px) {
-    .card-image {
-        height: 160px;
+    .card-image-container {
+        padding-top: 70%;
     }
 
     .product-name {
         font-size: 13px;
-        min-height: 36px;
+        height: 36px;
+        -webkit-line-clamp: 2;
     }
 
     .current-price {
@@ -127,6 +193,15 @@
 
     .discount-badge {
         font-size: 10px;
-        padding: 1px 5px;
+        padding: 3px 6px;
+    }
+
+    .price-section {
+        min-height: 40px;
+        padding: 6px 0;
+    }
+
+    .product-card-wrapper .ant-card-body {
+        padding: 10px;
     }
 }

@@ -10,7 +10,7 @@ const ProductCardComponent = ({ product, onAddToCart }) => {
   const navigate = useNavigate();
 
   const handleNavigate = () => {
-    navigate(`/product/${product.id || product._id}`);
+    navigate(`/product/${product._id}`);
   };
 
   const handleAddToCart = (e) => {

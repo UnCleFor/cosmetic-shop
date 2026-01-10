@@ -44,20 +44,31 @@ const routes = [
           </ProtectedRoute>
         ),
       },
-      {
-        path: "admin",
-        element: (
-          <RoleBasedRoute requiredRole="admin">
-            <AdminPage />
-          </RoleBasedRoute>
-        ),
-      },
     ],
   },
 
   { path: "/sign-in", element: <SignInPage /> },
   { path: "/sign-up", element: <SignUpPage /> },
 
+  {
+    path: "admin",
+
+  },
+
+  {
+    path: "/admin",
+    element: <MainLayout isShowFooter={false} />,
+    children: [
+      {
+        index: true, 
+        element: (
+          <RoleBasedRoute requiredRole="admin">
+            <AdminPage />
+          </RoleBasedRoute>
+        ),
+      },
+    ]
+  },
   { path: "*", element: <NotFoundPage /> },
 ];
 

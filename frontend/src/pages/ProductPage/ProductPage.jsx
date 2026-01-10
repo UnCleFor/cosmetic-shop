@@ -79,20 +79,20 @@ const ProductPage = () => {
       )}
 
       <SpinnerComponent isLoading={isFetching}>
-          <ProductGrid style={{ opacity: isFetching ? 0.6 : 1 }}>
-            {products.map((item) => (
-              <ProductCardComponent
-                key={item._id}
-                product={item}
-              />
-            ))}
-          </ProductGrid>
+        <ProductGrid style={{ opacity: isFetching ? 0.6 : 1 }}>
+          {products.map((item) => (
+            <ProductCardComponent
+              key={item._id}
+              product={item}
+            />
+          ))}
+        </ProductGrid>
 
-          {products.length === 0 && (
-            <p style={{ textAlign: "center" }}>
-              Không có sản phẩm
-            </p>
-          )}
+        {products.length === 0 && (
+          <p style={{ textAlign: "center" }}>
+            Không có sản phẩm
+          </p>
+        )}
       </SpinnerComponent>
 
       <PaginationComponent

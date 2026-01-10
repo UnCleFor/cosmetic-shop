@@ -12,10 +12,20 @@ class UserService {
         }
     }
 
-    // Lấy danh sách người dùng (có thể thêm filter sau)
-    static async getUsers() {
-        const users = await User.find().select("-password");
-        return users;
+    // Lấy danh sách người dùng
+    static async getUsers(page, limit) {
+        const skip = (page - 1) * limit;
+
+        const [users, total] = await Promise.all([
+            User.find()
+                .select("-password")
+                .skip(skip)
+                .limit(limit)
+                .lean(),
+            User.countDocuments(),
+        ]);
+
+        return { users, total };
     }
 
     // Lấy thông tin 1 người dùng

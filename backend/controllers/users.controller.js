@@ -117,10 +117,16 @@ class UsersController {
     // Lấy tất cả user
     static async getUsers(req, res) {
         try {
-            const users = await UserService.getUsers();
+            const page = Number(req.query.page) || 1;
+            const limit = Number(req.query.limit) || 10;
+
+            const { users, total } = await UserService.getUsers(page, limit);
 
             res.status(200).json({
-                count: users.length,
+                page,
+                limit,
+                total,
+                totalPages: Math.ceil(total / limit),
                 users,
             });
         } catch (err) {

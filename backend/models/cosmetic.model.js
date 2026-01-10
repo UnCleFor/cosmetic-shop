@@ -71,17 +71,17 @@ const cosmeticSchema = new mongoose.Schema({
         type: String,
     }],
 
-    rating: {
-        type: Number,
-        default: 0,
-        min: 0,
-        max: 5,
-    },
+    // rating: {
+    //     type: Number,        2 này làm mở rộng thêm làm đánh giá với sản phẩm yêu thích cá nhân hóa người dùng hay nè
+    //     default: 0,
+    //     min: 0,
+    //     max: 5,
+    // },
 
-    totalReviews: {
-        type: Number,
-        default: 0,
-    }
+    // totalReviews: {
+    //     type: Number,            
+    //     default: 0,
+    // }
 
 }, {
     timestamps: true

@@ -22,6 +22,9 @@ class CosmeticService {
         if (filters.category) {
             query.category = filters.category;
         }
+        if (filters.status) {
+            query.status = filters.status;
+        }
 
         // Pagination
         const skip = (page - 1) * limit;

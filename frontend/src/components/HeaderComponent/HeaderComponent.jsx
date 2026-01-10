@@ -8,7 +8,8 @@ import {
   UserOutlined,
   LogoutOutlined,
   ShoppingOutlined,
-  ShoppingCartOutlined
+  ShoppingCartOutlined,
+  DashboardOutlined
 } from "@ant-design/icons";
 import { CartContext } from "../../context/CartContext";
 import { userSelector, useDispatch, useSelector } from "react-redux"
@@ -50,6 +51,11 @@ function HeaderComponent() {
   // Chuyển hướng đến trang đơn hàng
   const handleOrdersRedirect = () => {
     window.location.href = "/orders";
+  };
+
+  // Chuyển hướng đến trang admin
+  const handleAdminDashboardRedirect = () => {
+    window.location.href = "/admin";
   };
 
 
@@ -96,6 +102,11 @@ function HeaderComponent() {
                     <li onClick={handleOrdersRedirect}>
                       <ShoppingOutlined /> Đơn hàng
                     </li>
+                    {user?.role === "admin" && (
+                      <li onClick={handleAdminDashboardRedirect}>
+                        <DashboardOutlined /> Quản lý hệ thống
+                      </li>
+                    )}
                     <li className="divider"></li>
                     <li onClick={handleLogout}>
                       <LogoutOutlined /> Đăng xuất
@@ -162,7 +173,16 @@ function HeaderComponent() {
                         className="mobile-profile-btn"
                         icon={<UserOutlined />}
                       >
-                        Tài khoản
+                        Thông tin cá nhân
+                      </Button>
+                      <Button
+                        type="default"
+                        onClick={handleOrdersRedirect}
+                        block
+                        className="mobile-orders-btn"
+                        icon={<ShoppingOutlined />}
+                      >
+                        Đơn hàng
                       </Button>
                       <Button
                         type="default"

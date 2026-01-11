@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userReducer from "./slices/userSlice";
 import counterReducer from './slices/counterSlice'
+import cartReducer from './slices/cartSlice'
 
 import {
   persistStore,
@@ -20,6 +21,7 @@ const persistedUserReducer = persistReducer(
 
 export const store = configureStore({
   reducer: {
+    cart: cartReducer,
     user: persistedUserReducer,
     counter: counterReducer,
   },

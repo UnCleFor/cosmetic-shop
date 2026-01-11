@@ -12,7 +12,7 @@ import {
   DashboardOutlined
 } from "@ant-design/icons";
 import { CartContext } from "../../context/CartContext";
-import { userSelector, useDispatch, useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { logout } from "../../redux/slices/userSlice";
 import "./HeaderComponent.css";
 import SpinnerComponent from "../SpinnerComponent/SpinnerComponent";
@@ -58,6 +58,10 @@ function HeaderComponent() {
     window.location.href = "/admin";
   };
 
+  const handleCartRedirect = () => {
+    window.location.href = "/cart";
+  };
+
   return (
     <>
       <header className="header-wrapper">
@@ -78,47 +82,49 @@ function HeaderComponent() {
         {/* Search + Icons */}
         <div className="right-actions">
           <SearchComponent placeholder="Tìm kiếm sản phẩm" />
-          <div className="cart-container">
-            <Badge count={cartCount} size="small" offset={[5, 0]}>
-              <div className="cart-icon">
-                <ShoppingCartOutlined />
-              </div>
-            </Badge>
-          </div>
 
           <SpinnerComponent isLoading={isLoading}>
             {/* Phần xác thực */}
             {isAuthenticated ? (
-              // Đã đăng nhập
-              <div className="user-profile">
-                <div className="user-avatar">
-                  {user?.avatar ? (
-                    <img src={user.avatar} alt={user.name} />
-                  ) : (
-                    <UserOutlined />
-                  )}
+              // đã đăng nhập
+              <>
+                <div className="cart-container">
+                  <Badge count={cartCount} size="small" offset={[5, 0]}>
+                    <div className="cart-icon" onClick={handleCartRedirect}>
+                      <ShoppingCartOutlined />
+                    </div>
+                  </Badge>
                 </div>
-                <span className="user-name">{user?.name}</span>
-                <div className="user-dropdown">
-                  <ul>
-                    <li onClick={handleProfileRedirect}>
-                      <UserOutlined /> Thông tin cá nhân
-                    </li>
-                    <li onClick={handleOrdersRedirect}>
-                      <ShoppingOutlined /> Đơn hàng
-                    </li>
-                    {user?.role === "admin" && (
-                      <li onClick={handleAdminDashboardRedirect}>
-                        <DashboardOutlined /> Quản lý hệ thống
-                      </li>
+                <div className="user-profile">
+                  <div className="user-avatar">
+                    {user?.avatar ? (
+                      <img src={user.avatar} alt={user.name} />
+                    ) : (
+                      <UserOutlined />
                     )}
-                    <li className="divider"></li>
-                    <li onClick={handleLogout}>
-                      <LogoutOutlined /> Đăng xuất
-                    </li>
-                  </ul>
+                  </div>
+                  <span className="user-name">{user?.name}</span>
+                  <div className="user-dropdown">
+                    <ul>
+                      <li onClick={handleProfileRedirect}>
+                        <UserOutlined /> Thông tin cá nhân
+                      </li>
+                      <li onClick={handleOrdersRedirect}>
+                        <ShoppingOutlined /> Đơn hàng
+                      </li>
+                      {user?.role === "admin" && (
+                        <li onClick={handleAdminDashboardRedirect}>
+                          <DashboardOutlined /> Quản lý hệ thống
+                        </li>
+                      )}
+                      <li className="divider"></li>
+                      <li onClick={handleLogout}>
+                        <LogoutOutlined /> Đăng xuất
+                      </li>
+                    </ul>
+                  </div>
                 </div>
-              </div>
+              </>
             ) : (
               // Chưa đăng nhập
               <div className="auth-container">

@@ -13,6 +13,7 @@ import ProtectedRoute from "../components/ProtectedRoute/ProtectedRoute";
 import RoleBasedRoute from "../components/RoleBasedRoute/RoleBasedRoute";
 import OrderDetailPage from "../pages/OrderDetailPage/OrderDetailPage";
 import AboutUsPage from "../pages/AboutUsPage/AboutUsPage";
+import CheckoutPage from "../pages/CheckoutPage/CheckoutPage"
 
 const routes = [
   {
@@ -28,6 +29,14 @@ const routes = [
         element: (
           <ProtectedRoute>
             <CartPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "checkout",
+        element: (
+          <ProtectedRoute>
+            <CheckoutPage />
           </ProtectedRoute>
         ),
       },

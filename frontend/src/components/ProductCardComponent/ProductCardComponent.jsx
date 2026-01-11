@@ -1,24 +1,43 @@
 import React from "react";
-import { Card } from "antd";
+import { Card, message } from "antd";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import { addToCart } from "../../redux/slices/cartSlice";
+import { useDispatch } from "react-redux"
 import "./ProductCardComponent.css";
 
 const { Meta } = Card;
 
 const ProductCardComponent = ({ product, onAddToCart }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleNavigate = () => {
     navigate(`/product/${product._id}`);
-  };
+  }
 
   const handleAddToCart = (e) => {
     e.stopPropagation();
-    onAddToCart && onAddToCart(product);
+    console.log("ADD PRODUCT:", {
+      id: product._id,
+      name: product.name
+    });
+
+    dispatch(addToCart({
+      productId: product._id,
+      name: product.name,
+      price:
+        product.discount > 0
+          ? product.price * (1 - product.discount / 100)
+          : product.price,
+      image: product.images?.[0] || product.image,
+      quantity: 1,
+    }));
+
+    message.success("Đã thêm vào giỏ hàng");
   };
 
-  // Hàm format giá tiền: 000.000 ₫
+  // Hàm format giá tiền
   const formatPrice = (price) => {
     return new Intl.NumberFormat('vi-VN').format(price) + ' ₫';
   };
@@ -29,10 +48,10 @@ const ProductCardComponent = ({ product, onAddToCart }) => {
         hoverable
         cover={
           <div className="card-image-container">
-            <img 
-              src={product.images?.[0] || product.image || "/placeholder.jpg"} 
-              alt={product.name} 
-              className="card-image" 
+            <img
+              src={product.images?.[0] || product.image || "/placeholder.jpg"}
+              alt={product.name}
+              className="card-image"
             />
             {/* Chỉ hiển thị badge nếu có discount > 0 */}
             {product.discount > 0 && (
@@ -49,11 +68,11 @@ const ProductCardComponent = ({ product, onAddToCart }) => {
           </div>
         ]}
       >
-        <Meta 
-          title={<div className="product-name">{product.name}</div>} 
+        <Meta
+          title={<div className="product-name">{product.name}</div>}
           description={<div className="product-brand">{product.brand}</div>}
         />
-        
+
         {/* Hiển thị giá */}
         <div className="price-section">
           {product.discount > 0 ? (

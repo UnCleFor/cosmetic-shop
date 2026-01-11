@@ -1,0 +1,150 @@
+.checkout-page {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    min-height: calc(100vh - 200px);
+    box-sizing: border-box;
+}
+
+.checkout-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.checkout-header h1 {
+    font-size: 28px;
+    color: var(--color-primary);
+}
+
+.checkout-content {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 24px;
+    margin-bottom: 40px;
+}
+
+@media (max-width: 768px) {
+    .checkout-content {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .checkout-page {
+        padding: 16px;
+        min-height: calc(100vh - 150px);
+    }
+}
+
+.info-card,
+.payment-card,
+.summary-card {
+    border-radius: 8px;
+    margin-bottom: 20px;
+    height: fit-content;
+}
+
+.summary-card {
+    position: sticky;
+    top: 20px;
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+}
+
+.order-items {
+    margin-bottom: 16px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.order-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.order-item:last-child {
+    border-bottom: none;
+}
+
+.item-quantity {
+    color: #666;
+    font-size: 14px;
+    margin-left: 8px;
+}
+
+.price-breakdown {
+    margin-bottom: 24px;
+}
+
+.price-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    color: #666;
+}
+
+.price-row.total {
+    color: #333;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.total-price {
+    color: var(--color-primary);
+    font-size: 20px;
+}
+
+.shipping-note {
+    background: #f6ffed;
+    color: #52c41a;
+    padding: 8px;
+    border-radius: 4px;
+    margin: 12px 0;
+    font-size: 14px;
+    text-align: center;
+}
+
+.place-order-btn {
+    height: 48px;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    background-color: var(--color-primary) !important;
+    color: white;
+}
+
+.place-order-btn:hover {
+    border-color: var(--color-primary) !important;
+    background-color: white !important;
+    color: var(--color-primary) !important;
+}
+
+.back-btn {
+    color: var(--color-primary) !important;
+}
+
+.payment-card {
+    min-height: auto;
+    padding-bottom: 16px;
+}
+
+.ant-radio-group {
+    width: 100%;
+}
+
+.ant-radio-wrapper {
+    display: block;
+    margin-bottom: 8px;
+}
+/* Thêm media query cho mobile */
+@media (max-width: 480px) {
+    .checkout-page {
+        min-height: calc(100vh - 120px);
+    }
+
+    .summary-card {
+        position: static;
+        max-height: none;
+    }
+}

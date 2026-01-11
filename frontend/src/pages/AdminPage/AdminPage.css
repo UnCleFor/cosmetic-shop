@@ -64,3 +64,8 @@
 .admin-tabs .ant-tabs-content {
     padding: 20px;
 }
+
+.ant-pagination-item-active {
+    border-color: var(--color-primary) !important;
+    color: var(--color-primary) !important;
+}

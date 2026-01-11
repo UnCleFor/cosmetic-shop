@@ -58,8 +58,6 @@ function HeaderComponent() {
     window.location.href = "/admin";
   };
 
-
-
   return (
     <>
       <header className="header-wrapper">

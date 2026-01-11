@@ -36,6 +36,17 @@
   gap: 20px;
 }
 
+/* Search */
+.ant-input-search-button {
+  background-color: var(--color-primary) !important;
+  color: white;
+}
+
+.ant-input-search-button:hover {
+  background-color: var(--color-primary-dark) !important;
+  color: white;
+}
+
 /* Cart */
 .cart-container {
   position: relative;

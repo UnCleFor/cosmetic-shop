@@ -37,6 +37,10 @@
     }
 }
 
+.cart-header h1{
+    color: var(--color-primary) !important;
+}
+
 .cart-items-card {
     border-radius: 8px;
     overflow: hidden;

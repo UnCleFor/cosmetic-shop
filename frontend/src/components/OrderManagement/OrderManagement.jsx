@@ -1,106 +1,186 @@
-import React, { useState } from 'react';
-import { Table, Select, Tag } from 'antd';
+import React, { useState } from "react";
+import {
+  Table, Button, Tag, Modal, Form,
+  Select, Input, Space, Popconfirm, Spin
+} from "antd";
+import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import useOrders from "../../hooks/order/userOrders";
+import useDelete from "../../hooks/order/useHardDelete";
+import useUpdate from "../../hooks/order/useUpdate";
 
 const { Option } = Select;
+const { TextArea } = Input;
+
+const statusConfig = {
+  confirming: { color: "orange", label: "Chờ xác nhận" },
+  processing: { color: "blue", label: "Đang xử lý" },
+  shipping: { color: "geekblue", label: "Đang giao" },
+  completed: { color: "green", label: "Hoàn thành" },
+  cancelled: { color: "red", label: "Đã hủy" },
+  deleted: { color: "default", label: "Đã xóa" }
+};
 
 const OrderManagement = () => {
-  const [orders, setOrders] = useState([
-    { _id: 1, code: 'DH001', customer: 'Nguyễn Văn A', total: 500000, status: 'pending' },
-    { _id: 2, code: 'DH002', customer: 'Trần Thị B', total: 1200000, status: 'processing' },
-    { _id: 3, code: 'DH003', customer: 'Lê Văn C', total: 750000, status: 'completed' },
-  ]);
+  const { data: orders, isLoading } = useOrders();
+  const updateOrderMutation = useUpdate();
+  const deleteOrderMutation = useDelete();
+  const [open, setOpen] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [form] = Form.useForm();
 
-  const updateOrderStatus = (orderId, newStatus) => {
-    setOrders(orders.map(order =>
-      order._id === orderId ? { ...order, status: newStatus } : order
-    ));
+  const openEditModal = (order) => {
+    setSelectedOrder(order);
+    form.setFieldsValue({
+      status: order.status,
+      totalPrice: order.totalPrice,
+      name: order.shippingAddress?.name,
+      phone: order.shippingAddress?.phone,
+      address: order.shippingAddress?.address,
+    });
+    setOpen(true);
   };
 
-  const getStatusColor = (status) => {
-    switch(status) {
-      case 'pending': return '#fa8c16';
-      case 'processing': return '#1890ff';
-      case 'shipping': return '#722ed1';
-      case 'completed': return '#52c41a';
-      case 'cancelled': return '#ff4d4f';
-      default: return '#d9d9d9';
-    }
-  };
-
-  const getStatusText = (status) => {
-    switch(status) {
-      case 'pending': return 'Chờ xác nhận';
-      case 'processing': return 'Đang xử lý';
-      case 'shipping': return 'Đang giao hàng';
-      case 'completed': return 'Hoàn thành';
-      case 'cancelled': return 'Đã hủy';
-      default: return status;
-    }
+  const handleSave = () => {
+    form.validateFields().then((values) => {
+      console.log('Sending update request:', {
+        orderId: selectedOrder._id,
+        data: {
+          status: values.status,
+          totalPrice: values.totalPrice,
+          shippingAddress: {
+            name: values.name,
+            phone: values.phone,
+            address: values.address,
+          },
+        }
+      });
+      updateOrderMutation.mutate({
+        orderId: selectedOrder._id,
+        data: {
+          status: values.status,
+          totalPrice: values.totalPrice,
+          shippingAddress: {
+            name: values.name,
+            phone: values.phone,
+            address: values.address,
+          },
+        },
+      });
+      setOpen(false);
+    });
   };
 
   const columns = [
-    { 
-      title: 'Mã đơn', 
-      dataIndex: 'code', 
-      key: 'code',
-      width: 100 
-    },
-    { 
-      title: 'Khách hàng', 
-      dataIndex: 'customer', 
-      key: 'customer',
-      width: 150 
-    },
-    { 
-      title: 'Tổng tiền', 
-      dataIndex: 'total', 
-      key: 'total',
-      width: 120,
-      render: (total) => `${total.toLocaleString('vi-VN')} ₫`
+    {
+      title: "Mã đơn",
+      dataIndex: "_id",
+      key: "code",
+      width: 100
     },
     {
-      title: 'Trạng thái',
-      dataIndex: 'status',
-      key: 'status',
-      width: 160,
-      render: (status, record) => (
-        <Select 
-          value={status} 
-          style={{ width: '100%' }}
-          onChange={(value) => updateOrderStatus(record._id, value)}
-        >
-          <Option value="pending">Chờ xác nhận</Option>
-          <Option value="processing">Đang xử lý</Option>
-          <Option value="shipping">Đang giao hàng</Option>
-          <Option value="completed">Hoàn thành</Option>
-          <Option value="cancelled">Đã hủy</Option>
-        </Select>
+      title: "Khách hàng",
+      key: "customer",
+      width: 150,
+      render: (_, r) => r.shippingAddress?.name,
+    },
+    {
+      title: "Số điện thoại", // Thêm cột SĐT
+      key: "phone",
+      width: 120,
+      render: (_, r) => r.shippingAddress?.phone || "-",
+    },
+    {
+      title: "Địa chỉ", // Thêm cột địa chỉ
+      key: "address",
+      ellipsis: true,
+      render: (_, r) => r.shippingAddress?.address || "-",
+    },
+    {
+      title: "Tổng tiền",
+      dataIndex: "totalPrice",
+      key: "totalPrice",
+      width: 130,
+      render: (v) => (
+        <span style={{ fontWeight: 500, color: "#d46b08" }}>
+          {v?.toLocaleString("vi-VN")} ₫
+        </span>
       ),
     },
     {
-      title: 'Hiển thị',
-      key: 'display',
-      width: 130,
-      render: (_, record) => (
-        <Tag 
-          color={getStatusColor(record.status)}
-          style={{ margin: 0, borderRadius: '4px' }}
-        >
-          {getStatusText(record.status)}
+      title: "Trạng thái",
+      dataIndex: "status",
+      key: "status",
+      width: 120,
+      render: (s) => (
+        <Tag color={statusConfig[s]?.color}>
+          {statusConfig[s]?.label}
         </Tag>
+      ),
+    },
+    {
+      title: "Thao tác",
+      key: "action",
+      width: 180,
+      render: (_, r) => (
+        <Space>
+          <Button
+            icon={<EditOutlined />}
+            onClick={() => openEditModal(r)}
+          >
+            Sửa
+          </Button>
+          <Popconfirm
+            title="Xóa đơn?"
+            onConfirm={() => deleteOrderMutation.mutate(r._id)}
+          >
+            <Button danger icon={<DeleteOutlined />}>
+              Xóa
+            </Button>
+          </Popconfirm>
+        </Space>
       ),
     },
   ];
 
+  if (isLoading) return <Spin />;
+
   return (
-    <div className="order-management">
-      <Table 
-        dataSource={orders} 
-        columns={columns} 
-        rowKey="_id"
-        pagination={{ pageSize: 10 }}
-      />
-    </div>
+    <>
+      <Table rowKey="_id" columns={columns} dataSource={orders} />
+
+      <Modal
+        open={open}
+        onOk={handleSave}
+        onCancel={() => setOpen(false)}
+        title="Cập nhật đơn hàng"
+      >
+        <Form form={form} layout="vertical">
+          <Form.Item name="status" label="Trạng thái">
+            <Select>
+              {Object.entries(statusConfig).map(([k, v]) => (
+                <Option key={k} value={k}>{v.label}</Option>
+              ))}
+            </Select>
+          </Form.Item>
+
+          <Form.Item name="totalPrice" label="Tổng tiền">
+            <Input type="number" />
+          </Form.Item>
+
+          <Form.Item name="name" label="Người nhận">
+            <Input />
+          </Form.Item>
+
+          <Form.Item name="phone" label="SĐT">
+            <Input />
+          </Form.Item>
+
+          <Form.Item name="address" label="Địa chỉ">
+            <TextArea rows={3} />
+          </Form.Item>
+        </Form>
+      </Modal>
+    </>
   );
 };
 

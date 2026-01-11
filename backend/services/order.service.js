@@ -17,8 +17,8 @@ class OrderService {
 
         const [orders, total] = await Promise.all([
             Order.find(query)
-                .populate("user", "name email")
-                .populate("items.product", "name price")
+                // .populate("user", "name email")
+                // .populate("items.product", "name price")
                 .sort({ createdAt: -1 })
                 .skip(skip)
                 .limit(limit),

@@ -25,7 +25,7 @@ class OrdersController {
     // Lấy toàn bộ đơn hàng
     static async getOrders(req, res) {
         try {
-            const { page = 1, limit = 10, status, user } = req.query;
+            const { page = 1, limit = 8, status, user } = req.query;
 
             const result = await OrderService.getOrders({
                 page: Number(page),

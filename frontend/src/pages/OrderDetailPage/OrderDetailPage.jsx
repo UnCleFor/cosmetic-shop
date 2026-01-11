@@ -60,9 +60,6 @@ const OrderDetailPage = () => {
         navigate('/orders');
     };
 
-    const handlePrintInvoice = () => {
-        window.print();
-    };
     if (isError) return <div>Đã xảy ra lỗi khi tải đơn hàng</div>
     if (!data?.data) return null;
 

@@ -12,7 +12,7 @@ router
     .post(UserController.loginUser);
 router
     .route('/refresh-token')
-    .post(UserController.refreshToken)
+    .post(UserController.refreshToken) 
 router
     .route('/:id')
     .get(authMiddleware.requireAdmin, UserController.getDetail)

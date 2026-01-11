@@ -1,4 +1,4 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import userReducer from "./slices/userSlice";
 import counterReducer from './slices/counterSlice'
 import cartReducer from './slices/cartSlice'
@@ -9,22 +9,40 @@ import {
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 
-const persistConfig = {
-  key: "root",
+const userPersistConfig = {
+  key: "user",
+  storage,
+};
+
+const cartPersistConfig = {
+  key: "cart",
   storage,
 };
 
 const persistedUserReducer = persistReducer(
-  persistConfig,
+  userPersistConfig,
   userReducer
 );
 
+const persistedCartReducer = persistReducer(
+  cartPersistConfig,
+  cartReducer
+);
+
+
+const rootReducer = combineReducers({
+  user: persistedUserReducer,
+  cart: persistedCartReducer,
+  counter: counterReducer, 
+});
+
+
 export const store = configureStore({
-  reducer: {
-    cart: cartReducer,
-    user: persistedUserReducer,
-    counter: counterReducer,
-  },
+  reducer: rootReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 });
 
 export const persistor = persistStore(store);

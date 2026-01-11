@@ -21,6 +21,7 @@ import { useNavigate } from "react-router-dom";
 import { logout } from "../../redux/slices/userSlice";
 import useUpdate from "../../hooks/user/useUpdate";
 import "./ProfilePage.css";
+import { clearCart } from "../../redux/slices/cartSlice";
 
 const ProfilePage = () => {
   const dispatch = useDispatch();
@@ -34,6 +35,7 @@ const ProfilePage = () => {
 
   const handleLogout = () => {
     dispatch(logout());
+    dispatch(clearCart())
     navigate("/");
     message.success("Đăng xuất thành công");
   };

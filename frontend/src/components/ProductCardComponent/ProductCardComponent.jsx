@@ -43,7 +43,7 @@ const ProductCardComponent = ({ product, onAddToCart }) => {
   };
 
   return (
-    <div className="product-card-wrapper">
+    <div className="product-card-wrapper" key={product._id}>
       <Card
         hoverable
         cover={

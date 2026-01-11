@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { logout } from "../../redux/slices/userSlice";
 import "./HeaderComponent.css";
 import SpinnerComponent from "../SpinnerComponent/SpinnerComponent";
+import { clearCart } from "../../redux/slices/cartSlice";
 
 function HeaderComponent() {
   const dispath = useDispatch()
@@ -30,6 +31,7 @@ function HeaderComponent() {
   const handleLogout = () => {
     setIsLoading(true)
     dispath(logout())
+    dispath(clearCart())
     setIsLoading(false)
   };
 

@@ -15,5 +15,5 @@ router
 router
     .route('/')
     .get(authMiddleware.requireAdmin, OrdersController.getOrders)
-    .post(OrdersController.createOrder);
+    .post(authMiddleware.requireAuth, OrdersController.createOrder);
 export default router;

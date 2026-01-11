@@ -7,7 +7,7 @@ const router = express.Router();
 router
     .route('/')
     .get(CosmeticsController.getCosmetics)
-    .post(CosmeticsController.createCosmetic);
+    .post(authMiddleware.requireAdmin, CosmeticsController.createCosmetic);
 router
     .route('/:id')
     .get(CosmeticsController.getCosmeticById)

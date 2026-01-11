@@ -11,7 +11,7 @@ const axiosClient = axios.create({
 // Thêm Token vào Header
 axiosClient.interceptors.request.use(
   (config) => {
-    const root = localStorage.getItem("persist:root");
+    const root = localStorage.getItem("persist:user");
 
     if (root) {
       const parsedRoot = JSON.parse(root);

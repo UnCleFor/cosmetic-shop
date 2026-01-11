@@ -53,8 +53,8 @@ class JwtService {
             role: user.role
         };
 
-        const accessToken = this.generateAccessToken(payload, '15m'); // 15 phút
-        const refreshToken = this.generateRefreshToken(payload, '7d'); // 7 ngày
+        const accessToken = this.generateAccessToken(payload, '24h');
+        const refreshToken = this.generateRefreshToken(payload, '7d');
 
         return {
             accessToken,

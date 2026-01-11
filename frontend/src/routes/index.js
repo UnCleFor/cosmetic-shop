@@ -11,6 +11,7 @@ import ProductDetailPage from "../pages/ProductDetailPage/ProductDetailPage"
 import NotFoundPage from "../pages/NotFoundPage/NotFoundPage";
 import ProtectedRoute from "../components/ProtectedRoute/ProtectedRoute";
 import RoleBasedRoute from "../components/RoleBasedRoute/RoleBasedRoute";
+import OrderDetailPage from "../pages/OrderDetailPage/OrderDetailPage";
 
 const routes = [
   {
@@ -25,6 +26,14 @@ const routes = [
         element: (
           <ProtectedRoute>
             <CartPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "order/:id",
+        element: (
+          <ProtectedRoute>
+            <OrderDetailPage />
           </ProtectedRoute>
         ),
       },
@@ -55,7 +64,7 @@ const routes = [
     element: <MainLayout isShowFooter={false} />,
     children: [
       {
-        index: true, 
+        index: true,
         element: (
           <RoleBasedRoute requiredRole="admin">
             <AdminPage />

@@ -1,0 +1,250 @@
+/* Order Page - Simple Version */
+.my-orders-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Header đơn giản */
+.orders-header-simple {
+    margin-bottom: 24px;
+    padding: 16px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.page-title-simple {
+    font-size: 24px;
+    font-weight: 600;
+    color: #222;
+    margin: 0 0 8px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.page-title-simple svg {
+    color: var(--color-primary);
+}
+
+.page-subtitle-simple {
+    color: #666;
+    margin: 0;
+    font-size: 14px;
+}
+
+/* Card tabs đơn giản */
+.orders-tabs-card-simple {
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.my-orders-tabs-simple .ant-tabs-nav {
+    margin-bottom: 16px;
+}
+
+.my-orders-tabs-simple .ant-tabs-tab {
+    font-weight: 500;
+    padding: 12px 16px;
+}
+
+.my-orders-tabs-simple .ant-tabs-tab-active {
+    color: var(--color-primary);
+}
+
+.ant-tabs-tab-btn:hover {
+    color: var(--color-primary) !important;
+}
+
+.ant-tabs-tab-active .ant-tabs-tab-btn {
+    color: var(--color-primary) !important;
+}
+
+.my-orders-tabs-simple .ant-tabs-ink-bar {
+    background: var(--color-primary);
+}
+
+/* Order card đơn giản */
+.order-card-simple {
+    margin-bottom: 16px;
+    border-radius: 8px;
+    border: 1px solid #f0f0f0;
+    transition: box-shadow 0.3s ease;
+}
+
+.order-card-simple:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.order-header-simple {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.order-id-simple {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.order-date-simple {
+    font-size: 14px;
+    color: #666;
+}
+
+.status-tag-simple {
+    font-size: 13px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin: 0;
+}
+
+/* Order info đơn giản */
+.order-info-simple {
+    margin-bottom: 16px;
+}
+
+.info-row {
+    display: flex;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.info-label {
+    min-width: 100px;
+    color: #666;
+    font-weight: 500;
+}
+
+.info-value {
+    flex: 1;
+    color: #333;
+    word-break: break-word;
+}
+
+.info-value.total-price {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--color-primary);
+}
+
+.info-value.paid {
+    color: #52c41a;
+}
+
+.info-value.pending {
+    color: #faad14;
+}
+
+.info-value svg {
+    margin-right: 6px;
+    font-size: 12px;
+}
+
+/* Actions đơn giản */
+.order-actions-simple {
+    padding-top: 16px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.space {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.view-btn {
+    color: white;
+    border-color: var(--color-primary);
+    background: var(--color-primary);
+}
+
+.view-btn:hover {
+    border-color: var(--color-primary) !important;
+    background: white !important;
+    color: var(--color-primary) !important;
+}
+
+.cancel-btn {
+    font-weight: 500;
+}
+
+.delete-btn {
+    border-color: red;
+    font-weight: 500;
+}
+
+/* Empty state */
+.empty-orders-simple {
+    padding: 40px 0;
+}
+
+.empty-orders-simple .ant-empty-description {
+    color: #666;
+    margin-bottom: 16px;
+}
+
+/* Modal */
+.ant-modal-confirm {
+    z-index: 1000 !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .my-orders-container {
+        padding: 16px;
+    }
+
+    .order-header-simple {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .status-tag-simple {
+        align-self: flex-start;
+    }
+
+    .info-row {
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .info-label {
+        min-width: auto;
+    }
+
+    .order-actions-simple .ant-space {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .order-actions-simple .ant-btn {
+        flex: 1;
+    }
+}
+
+@media (max-width: 480px) {
+    .page-title-simple {
+        font-size: 20px;
+    }
+
+    .my-orders-tabs-simple .ant-tabs-tab {
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+
+    .order-actions-simple .ant-space {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .order-actions-simple .ant-btn {
+        width: 100%;
+        margin-bottom: 8px;
+    }
+}

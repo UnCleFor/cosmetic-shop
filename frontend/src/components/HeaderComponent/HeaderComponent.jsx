@@ -80,6 +80,13 @@ function HeaderComponent() {
         {/* Search + Icons */}
         <div className="right-actions">
           <SearchComponent placeholder="Tìm kiếm sản phẩm" />
+          <div className="cart-container">
+            <Badge count={cartCount} size="small" offset={[5, 0]}>
+              <div className="cart-icon">
+                <ShoppingCartOutlined />
+              </div>
+            </Badge>
+          </div>
 
           <SpinnerComponent isLoading={isLoading}>
             {/* Phần xác thực */}

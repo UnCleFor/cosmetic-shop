@@ -1,9 +1,9 @@
 import express from 'express';
 import CosmeticsController from '../controllers/cosmetics.controller.js';
+import authMiddleware from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
-//demo thử
 router
     .route('/')
     .get(CosmeticsController.getCosmetics)
@@ -11,6 +11,6 @@ router
 router
     .route('/:id')
     .get(CosmeticsController.getCosmeticById)
-    .put(CosmeticsController.updateCosmetic)
-    .delete(CosmeticsController.deleteCosmetic);
+    .put(authMiddleware.requireAdmin, CosmeticsController.updateCosmetic)
+    .delete(authMiddleware.requireAdmin, CosmeticsController.deleteCosmetic);
 export default router;

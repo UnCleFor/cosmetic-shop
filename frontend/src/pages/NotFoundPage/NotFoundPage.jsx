@@ -1,9 +1,43 @@
-import React from 'react'
+import React from "react";
+import { Result, Button } from "antd";
+import { useNavigate } from "react-router-dom";
 
 const NotFoundPage = () => {
-  return (
-    <div>NotFoundPage</div>
-  )
-}
+  const navigate = useNavigate();
 
-export default NotFoundPage
+  return (
+    <div
+      style={{
+        minHeight: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        background: "#fff7f0",
+      }}
+    >
+      <Result
+        status="404"
+        title={
+          <span style={{ color: "#E15404", fontWeight: 700 }}>
+            404
+          </span>
+        }
+        subTitle="Xin lỗi, trang bạn đang tìm kiếm không tồn tại."
+        extra={
+          <Button
+            type="primary"
+            style={{
+              backgroundColor: "#E15404",
+              borderColor: "#E15404",
+            }}
+            onClick={() => navigate("/")}
+          >
+            Quay về trang chủ
+          </Button>
+        }
+      />
+    </div>
+  );
+};
+
+export default NotFoundPage;

@@ -12,6 +12,7 @@ import NotFoundPage from "../pages/NotFoundPage/NotFoundPage";
 import ProtectedRoute from "../components/ProtectedRoute/ProtectedRoute";
 import RoleBasedRoute from "../components/RoleBasedRoute/RoleBasedRoute";
 import OrderDetailPage from "../pages/OrderDetailPage/OrderDetailPage";
+import AboutUsPage from "../pages/AboutUsPage/AboutUsPage";
 
 const routes = [
   {
@@ -21,6 +22,7 @@ const routes = [
       { index: true, element: <HomePage /> },
       { path: "products", element: <ProductPage /> },
       { path: "product/:id", element: <ProductDetailPage /> },
+      { path: "about", element: <AboutUsPage /> },
       {
         path: "cart",
         element: (

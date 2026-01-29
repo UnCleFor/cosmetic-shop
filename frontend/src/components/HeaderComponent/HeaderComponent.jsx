@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { Badge, Button } from "antd";
 import NavComponent from "../NavComponent/NavComponent";
 import SearchComponent from "../SearchComponent/SearchComponent";
@@ -11,21 +11,26 @@ import {
   ShoppingCartOutlined,
   DashboardOutlined
 } from "@ant-design/icons";
-import { CartContext } from "../../context/CartContext";
 import { useDispatch, useSelector } from "react-redux"
 import { logout } from "../../redux/slices/userSlice";
-import "./HeaderComponent.css";
 import SpinnerComponent from "../SpinnerComponent/SpinnerComponent";
 import { clearCart } from "../../redux/slices/cartSlice";
+import "./HeaderComponent.css";
 
 function HeaderComponent() {
   const dispath = useDispatch()
 
   const { user } = useSelector((state) => state.user);
+  const cartItems = useSelector((state) => state.cart.items);
   const isAuthenticated = Boolean(user);
+  
   const [isLoading, setIsLoading] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { cartCount } = useContext(CartContext);
+
+  const cartCount = cartItems.reduce(
+    (total, item) => total + 1,
+    0
+  );
 
   // Xử lý đăng xuất
   const handleLogout = () => {
@@ -91,7 +96,7 @@ function HeaderComponent() {
               // đã đăng nhập
               <>
                 <div className="cart-container">
-                  <Badge count={cartCount} size="small" offset={[5, 0]}>
+                  <Badge count={ cartCount } size="small" offset={[5, 0]}>
                     <div className="cart-icon" onClick={handleCartRedirect}>
                       <ShoppingCartOutlined />
                     </div>

@@ -67,5 +67,8 @@
 
 .ant-pagination-item-active {
     border-color: var(--color-primary) !important;
+}
+
+.ant-pagination-item-active a {
     color: var(--color-primary) !important;
 }

@@ -21,11 +21,12 @@ import { useNavigate } from "react-router-dom";
 import { logout } from "../../redux/slices/userSlice";
 import useUpdate from "../../hooks/user/useUpdate";
 import "./ProfilePage.css";
-import { clearCart } from "../../redux/slices/cartSlice";
+import useClear from "../../hooks/cart/useClear";
 
 const ProfilePage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const clearCart = useClear();
   const updateUserMutation = useUpdate();
 
   const { user } = useSelector((state) => state.user);
@@ -35,9 +36,11 @@ const ProfilePage = () => {
 
   const handleLogout = () => {
     dispatch(logout());
-    dispatch(clearCart())
-    navigate("/");
+    clearCart()
     message.success("Đăng xuất thành công");
+    setTimeout(() => {
+      navigate("/");
+    }, 300);
   };
 
   const handleEditProfile = () => {

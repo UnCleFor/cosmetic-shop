@@ -8,6 +8,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "./index.css";
 import "./styles/global.css";
 import "./styles/theme.css";
+import { ConfigProvider } from "antd";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -25,7 +26,9 @@ root.render(
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <QueryClientProvider client={queryClient}>
-          <App />
+          <ConfigProvider>
+            <App />
+          </ConfigProvider>
         </QueryClientProvider>
       </PersistGate>
     </Provider>

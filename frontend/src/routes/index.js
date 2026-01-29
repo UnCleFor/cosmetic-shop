@@ -1,4 +1,4 @@
-import MainLayout from "../layouts/MainLayout";
+import MainLayout from "../layouts/MainLayout/MainLayout";
 import HomePage from "../pages/HomePage/HomePage";
 import ProductPage from "../pages/ProductPage/ProductPage";
 import CartPage from "../pages/CartPage/CartPage";

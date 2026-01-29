@@ -1,0 +1,22 @@
+.btn-primary {
+  background-color: var(--color-primary);
+  color: #fff;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  padding: 0.8rem 1.6rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.5s ease;
+}
+
+.btn-primary:hover {
+  background-color: white !important;
+  color: var(--color-primary) !important;
+  border-color: var(--color-primary) !important;
+}
+
+/* Active effect */
+.btn-primary:active {
+  transform: scale(0.98);
+}

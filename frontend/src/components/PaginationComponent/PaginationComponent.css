@@ -1,0 +1,22 @@
+.pagination-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+/* Item active */
+.pagination-wrapper .ant-pagination-item-active {
+  border-color: var(--color-primary);
+}
+
+.pagination-wrapper .ant-pagination-item-active a {
+  color: var(--color-primary);
+}
+
+/* Hover */
+.pagination-wrapper .ant-pagination-item:hover a,
+.pagination-wrapper .ant-pagination-next:hover .ant-pagination-item-link,
+.pagination-wrapper .ant-pagination-prev:hover .ant-pagination-item-link {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}

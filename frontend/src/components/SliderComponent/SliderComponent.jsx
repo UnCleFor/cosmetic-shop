@@ -1,6 +1,6 @@
 import React from "react";
 import Slider from "react-slick";
-import { SlideImage, SliderWrapper } from "./SliderComponent.styles";
+import "./SliderComponent.css"
 
 const SliderComponent = ({ slides }) => {
   const settings = {
@@ -14,15 +14,19 @@ const SliderComponent = ({ slides }) => {
   };
 
   return (
-    <SliderWrapper>
+    <div className="slider-wrapper">
       <Slider {...settings}>
         {slides.map((slide, index) => (
           <div key={index}>
-            <SlideImage src={slide} alt={`slide-${index}`} />
+            <img
+              src={slide}
+              alt={`slide-${index}`}
+              className="slide-image"
+            />
           </div>
         ))}
       </Slider>
-    </SliderWrapper>
+    </div>
   );
 };
 

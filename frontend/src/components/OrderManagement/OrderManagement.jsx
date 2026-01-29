@@ -42,18 +42,6 @@ const OrderManagement = () => {
 
   const handleSave = () => {
     form.validateFields().then((values) => {
-      console.log('Sending update request:', {
-        orderId: selectedOrder._id,
-        data: {
-          status: values.status,
-          totalPrice: values.totalPrice,
-          shippingAddress: {
-            name: values.name,
-            phone: values.phone,
-            address: values.address,
-          },
-        }
-      });
       updateOrderMutation.mutate({
         orderId: selectedOrder._id,
         data: {
@@ -84,16 +72,29 @@ const OrderManagement = () => {
       render: (_, r) => r.shippingAddress?.name,
     },
     {
-      title: "Số điện thoại", // Thêm cột SĐT
+      title: "Số điện thoại",
       key: "phone",
       width: 120,
       render: (_, r) => r.shippingAddress?.phone || "-",
     },
     {
-      title: "Địa chỉ", // Thêm cột địa chỉ
+      title: "Địa chỉ",
       key: "address",
       ellipsis: true,
       render: (_, r) => r.shippingAddress?.address || "-",
+    },
+    {
+      title: "Sản phẩm",
+      key: "items",
+      render: (_, order) => (
+        <div>
+          {order.items?.map((item, index) => (
+            <div key={index} style={{ marginBottom: 6 }}>
+              <strong>{item.name}</strong> × {item.quantity}
+            </div>
+          ))}
+        </div>
+      ),
     },
     {
       title: "Tổng tiền",

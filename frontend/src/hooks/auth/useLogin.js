@@ -1,4 +1,3 @@
-// hooks/auth/useLogin.js
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import UsersService from "../../services/users.service";

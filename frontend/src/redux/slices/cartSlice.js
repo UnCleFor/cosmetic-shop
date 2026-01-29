@@ -16,11 +16,11 @@ const cartSlice = createSlice({
             );
 
             if (existingItem) {
-                existingItem.quantity += 1;
+                existingItem.quantity += item.quantity;
             } else {
                 state.items.push({
                     ...item,
-                    quantity: 1,
+                    quantity: item.quantity,
                 });
             }
         },

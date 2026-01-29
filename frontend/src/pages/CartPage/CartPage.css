@@ -31,6 +31,16 @@
     gap: 24px;
 }
 
+.ant-btn-primary {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+.ant-btn-primary:hover {
+    background-color: var(--color-primary-dark) !important;
+    border-color: var(--color-primary-dark) !important;
+}
+
 @media (max-width: 992px) {
     .cart-content {
         grid-template-columns: 1fr;

@@ -5,6 +5,7 @@ import {
 const initialState = {
     user: null,
     accessToken: null,
+    isAuthenticated: false,
 };
 
 const userSlice = createSlice({
@@ -17,6 +18,7 @@ const userSlice = createSlice({
 
             state.user = user;
             state.accessToken = accessToken;
+            state.isAuthenticated = true;
         },
 
         // Refresh token

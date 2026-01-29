@@ -52,7 +52,7 @@ const OrderDetailPage = () => {
     };
 
     const formatPrice = (price) => {
-        if(!price) return '0 ₫'
+        if (!price) return '0 ₫'
         return price.toLocaleString('vi-VN') + ' ₫';
     };
 
@@ -65,7 +65,7 @@ const OrderDetailPage = () => {
 
     const order = data.data
     console.log(order.items[0].name)
-    
+
     return (
         <SpinnerComponent isLoading={isLoading}>
             <div className="order-detail-minimal">
@@ -78,7 +78,10 @@ const OrderDetailPage = () => {
                         className="back-btn-minimal"
                     >
                     </Button>
-                    <h1 className="order-title">Đơn hàng #{order._id}</h1>
+                    <h1 className="order-title">
+                        <span>Đơn hàng #</span>
+                        <span className="order-id">{order._id}</span>
+                    </h1>
                 </div>
 
                 {/* Status and date */}
@@ -94,26 +97,31 @@ const OrderDetailPage = () => {
 
                 <div className="order-content-minimal">
                     {/* Products */}
-                    <Card title="Sản phẩm đã đặt" className="products-card-minimal">
+                    <Card title="Sản phẩm đã mua" className="products-card-minimal">
                         <List
                             dataSource={order.items}
-                            renderItem={(item) => (
-                                <List.Item className="product-item-minimal">
-                                    <Avatar
-                                        src={item.image}
-                                        size={64}
-                                        shape="square"
-                                        className="product-image"
-                                    />
-                                    <div className="product-details">
-                                        <div className="product-name">{item.name}</div>
-                                        <div className="product-meta">
-                                            <span className="product-quantity">Số lượng: {item.quantity}</span>
-                                            <span className="product-price">{formatPrice(item.price * item.quantity)}</span>
+                            renderItem={(item) => {
+                                const priceDiscount = (item.price * item.discount / 100) * item.quantity;
+                                const itemTotal = item.price * item.quantity - priceDiscount;
+
+                                return (
+                                    <List.Item className="product-item-minimal">
+                                        <Avatar
+                                            src={item.image}
+                                            size={64}
+                                            shape="square"
+                                            className="product-image"
+                                        />
+                                        <div className="product-details">
+                                            <div className="product-name">{item.name}</div>
+                                            <div className="product-meta">
+                                                <span className="product-quantity">Số lượng: {item.quantity}</span>
+                                                <span className="product-price">{formatPrice(itemTotal)}</span>
+                                            </div>
                                         </div>
-                                    </div>
-                                </List.Item>
-                            )}
+                                    </List.Item>
+                                )
+                            }}
                         />
                     </Card>
 

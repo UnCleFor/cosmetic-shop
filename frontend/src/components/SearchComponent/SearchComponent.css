@@ -41,7 +41,7 @@
 /* Icon search trong button */
 .search-wrapper .search-input .ant-input-search-button:hover .anticon-search,
 .search-wrapper .search-input .ant-input-search-button:focus .anticon-search {
-    color: white;
+    color: var(--color-primary);
 }
 
 /* Clear button */

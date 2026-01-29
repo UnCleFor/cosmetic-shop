@@ -12,12 +12,12 @@ router
     .post(UserController.loginUser);
 router
     .route('/refresh-token')
-    .post(UserController.refreshToken) 
+    .post(UserController.refreshToken);
 router
     .route('/:id')
     .get(authMiddleware.requireAdmin, UserController.getDetail)
     .delete(authMiddleware.requireAdmin, UserController.deleteUser)
-    .put(UserController.updateUser);
+    .put(authMiddleware.requireAuth, UserController.updateUser);
 router
     .route('/')
     .get(authMiddleware.requireAdmin, UserController.getUsers)

@@ -161,8 +161,8 @@
     transition: all 0.3s ease;
 }
 
-.cart-wrapper:hover {
-    background-color: var(--color-primary);
+.cart-wrapper:hover .cart-icon {
+    color: var(--color-primary) !important;
 }
 
 .cart-icon {

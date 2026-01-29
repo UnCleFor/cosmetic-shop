@@ -3,37 +3,38 @@ import { useNavigate } from 'react-router-dom';
 import { Card, Form, Input, Button, Radio, Divider, message } from 'antd';
 import { UserOutlined, PhoneOutlined, HomeOutlined, CreditCardOutlined } from '@ant-design/icons';
 import './CheckoutPage.css';
+import { useSelector } from 'react-redux';
+import useClear from '../../hooks/cart/useClear';
+import useCreate from '../../hooks/order/useCreate';
 
 const { TextArea } = Input;
 
 const CheckoutPage = () => {
   const navigate = useNavigate();
+  const clearCart = useClear();
+
+  const useCreateOrder = useCreate();
+  const cartItems = useSelector((state) => state.cart.items);
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState('cod');
 
-  // Giỏ hàng
-  const cartItems = [
-    { 
-      id: '1', 
-      name: 'Kem dưỡng ẩm La Roche-Posay', 
-      price: 350000, 
-      quantity: 2,
+  const { mutate: createOrder, isLoading } = useCreate({
+    onSuccess: () => {
+      clearCart();
+      navigate("/orders");
     },
-    { 
-      id: '2', 
-      name: 'Sữa rửa mặt Cetaphil', 
-      price: 180000, 
-      quantity: 1,
-    },
-  ];
+  });
 
   const formatPrice = (price) => {
     return price.toLocaleString('vi-VN') + ' ₫';
   };
 
   const getSubtotal = () => {
-    return cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    return cartItems.reduce((sum, item) => {
+      const priceDiscount = (item.price * item.discount / 100);
+      return sum + (item.price - priceDiscount) * item.quantity
+    }, 0);
   };
 
   const getTotal = () => {
@@ -42,32 +43,74 @@ const CheckoutPage = () => {
     return subtotal + shipping;
   };
 
-  const placeOrder = async () => {
+  // const handlePlaceOrder = async () => {
+  //   try {
+  //     const values = await form.validateFields();
+  //     setLoading(true);
+
+  //     // Giả lập API call
+  //     await new Promise(resolve => setTimeout(resolve, 1000));
+
+  //     const orderData = {
+  //       shippingAddress: {
+  //         name: values.name,
+  //         phone: values.phone,
+  //         address: values.address,
+  //       },
+
+  //       paymentMethod,
+
+  //       items: cartItems.map(item => ({
+  //         product: item.productId,
+  //         name: item.name,
+  //         price: item.price,
+  //         quantity: item.quantity,
+  //         image: item.image,
+  //       })),
+
+  //       totalPrice: getTotal(),
+  //     };
+
+  //     console.log('Tạo đơn:', orderData);
+
+  //     message.success('Mua hàng thành công!');
+  //     navigate('/orders');
+
+  //   } catch (error) {
+  //     console.log('Lỗi:', error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  const handlePlaceOrder = async () => {
     try {
       const values = await form.validateFields();
-      setLoading(true);
-      
-      // Giả lập API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+
       const orderData = {
-        ...values,
+        shippingAddress: {
+          name: values.name,
+          phone: values.phone,
+          address: values.address,
+        },
         paymentMethod,
-        items: cartItems,
-        totalAmount: getTotal(),
+        items: cartItems.map(item => ({
+          product: item.productId,
+          discount: item.discount,
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity,
+          image: item.image,
+        })),
+        totalPrice: getTotal(),
       };
-      
-      console.log('Tạo đơn:', orderData);
-      
-      message.success('Đặt hàng thành công!');
-      navigate('/orders');
-      
+
+      createOrder(orderData);
     } catch (error) {
-      console.log('Lỗi:', error);
-    } finally {
-      setLoading(false);
+      console.error(error);
     }
   };
+
 
   return (
     <div className="checkout-page">
@@ -87,7 +130,7 @@ const CheckoutPage = () => {
                 label="Họ và tên"
                 rules={[{ required: true, message: 'Vui lòng nhập họ tên' }]}
               >
-                <Input 
+                <Input
                   placeholder="Nhập họ và tên"
                   size="large"
                 />
@@ -101,7 +144,7 @@ const CheckoutPage = () => {
                   { pattern: /^[0-9]{10,11}$/, message: 'Số điện thoại không hợp lệ' }
                 ]}
               >
-                <Input 
+                <Input
                   placeholder="Nhập số điện thoại"
                   size="large"
                 />
@@ -121,8 +164,8 @@ const CheckoutPage = () => {
           </Card>
 
           <Card title="Phương thức thanh toán" className="payment-card">
-            <Radio.Group 
-              value={paymentMethod} 
+            <Radio.Group
+              value={paymentMethod}
               onChange={(e) => setPaymentMethod(e.target.value)}
             >
               <Radio value="cod">
@@ -135,17 +178,22 @@ const CheckoutPage = () => {
         <div className="order-summary">
           <Card title="Đơn hàng của bạn" className="summary-card">
             <div className="order-items">
-              {cartItems.map(item => (
-                <div key={item.id} className="order-item">
-                  <div className="item-name">
-                    <span>{item.name}</span>
-                    <span className="item-quantity">x{item.quantity}</span>
+              {cartItems.map(item => {
+                const priceDiscount = (item.price * item.discount / 100) * item.quantity;
+                const itemTotal = item.price * item.quantity - priceDiscount;
+
+                return (
+                  <div key={item.productId} className="order-item">
+                    <div className="item-name">
+                      <span>{item.name}</span>
+                      <span className="item-quantity">x{item.quantity}</span>
+                    </div>
+                    <div className="item-price">
+                      {formatPrice(itemTotal)}
+                    </div>
                   </div>
-                  <div className="item-price">
-                    {formatPrice(item.price * item.quantity)}
-                  </div>
-                </div>
-              ))}
+                )
+              })}
             </div>
 
             <Divider />
@@ -155,22 +203,22 @@ const CheckoutPage = () => {
                 <span>Tạm tính</span>
                 <span>{formatPrice(getSubtotal())}</span>
               </div>
-              
+
               <div className="price-row">
                 <span>Phí vận chuyển</span>
                 <span>
                   {getSubtotal() > 500000 ? 'Miễn phí' : formatPrice(30000)}
                 </span>
               </div>
-              
+
               {getSubtotal() < 500000 && (
                 <div className="shipping-note">
                   Mua thêm {formatPrice(500000 - getSubtotal())} để được miễn phí vận chuyển
                 </div>
               )}
-              
+
               <Divider />
-              
+
               <div className="price-row total">
                 <span>Tổng thanh toán</span>
                 <span className="total-price">{formatPrice(getTotal())}</span>
@@ -182,10 +230,10 @@ const CheckoutPage = () => {
               size="large"
               block
               loading={loading}
-              onClick={placeOrder}
+              onClick={handlePlaceOrder}
               className="place-order-btn"
             >
-              Đặt hàng
+              Mua hàng
             </Button>
 
             <Button

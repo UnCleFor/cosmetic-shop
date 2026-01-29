@@ -1,19 +1,24 @@
 import React from "react";
 import { Pagination } from "antd";
-import { PaginationWrapper } from "./styles";
+import "./PaginationComponent.css";
 
-const PaginationComponent = ({ current = 3, total = 100, pageSize = 12, onChange }) => {
+const PaginationComponent = ({
+  current = 3,
+  total = 100,
+  pageSize = 12,
+  onChange,
+}) => {
   return (
-    <PaginationWrapper>
+    <div className="pagination-wrapper">
       <Pagination
         total={total}
         pageSize={pageSize}
         current={current}
         onChange={onChange}
-        showSizeChanger={false} // Ẩn dropdown chọn số sản phẩm/trang
+        showSizeChanger={false}
         showQuickJumper
       />
-    </PaginationWrapper>
+    </div>
   );
 };
 

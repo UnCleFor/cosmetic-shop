@@ -8,51 +8,79 @@ class CosmeticService {
         return cosmetic;
     }
 
-    // Lấy danh sách mỹ phẩm với filter và phân trang
     static async getCosmetics({ filters = {}, page = 1, limit = 8, sort = {} }) {
-        const query = {};
+        const matchStage = {};
 
         // Search
         if (filters.search) {
-            query.$or = [
+            matchStage.$or = [
                 { name: { $regex: filters.search, $options: "i" } },
             ];
         }
 
-        // Filter 
-        if (filters.brand) {
-            query.brand = filters.brand;
-        }
-
-        if (filters.category) {
-            query.category = filters.category;
-        }
-
-        if (filters.status) {
-            query.status = filters.status;
-        }
+        // Filter
+        if (filters.brand) matchStage.brand = filters.brand;
+        if (filters.category) matchStage.category = filters.category;
+        if (filters.status) matchStage.status = filters.status;
 
         // Pagination
         const skip = (page - 1) * limit;
 
         // Sort
-        const allowedSortFields = ["price", "createdAt", "name", "discount", "sold"];
+        const allowedSortFields = [
+            "price",
+            "createdAt",
+            "name",
+            "discount",
+            "sold",
+            "finalPrice",
+        ];
+
         const sortField = allowedSortFields.includes(sort.sortBy)
             ? sort.sortBy
             : "createdAt";
 
         const sortOrder = sort.order === "asc" ? 1 : -1;
 
-        const sortOption = {
-            [sortField]: sortOrder,
-        };
+        const pipeline = [
+            { $match: matchStage },
+
+            // Giá sau giảm
+            {
+                $addFields: {
+                    finalPrice: {
+                        $cond: [
+                            { $gt: ["$discount", 0] },
+                            {
+                                $subtract: [
+                                    "$price",
+                                    {
+                                        $multiply: [
+                                            "$price",
+                                            { $divide: ["$discount", 100] },
+                                        ],
+                                    },
+                                ],
+                            },
+                            "$price",
+                        ],
+                    },
+                },
+            },
+
+            {
+                $sort: {
+                    [sortField === "price" ? "finalPrice" : sortField]: sortOrder,
+                },
+            },
+
+            { $skip: skip },
+            { $limit: limit },
+        ];
 
         const [cosmetics, total] = await Promise.all([
-            Cosmetic.find(query)
-                .sort(sortOption)
-                .skip(skip)
-                .limit(limit),
-            Cosmetic.countDocuments(query),
+            Cosmetic.aggregate(pipeline),
+            Cosmetic.countDocuments(matchStage),
         ]);
 
         return {
@@ -62,6 +90,8 @@ class CosmeticService {
             cosmetics,
         };
     }
+
+
 
     // Lấy mỹ phẩm theo ID
     static async getCosmeticById(id) {

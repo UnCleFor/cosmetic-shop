@@ -47,7 +47,7 @@ const authMiddleware = {
             }
 
             const decoded = jwt.verify(token, process.env.ACCESS_TOKEN);
-            const user = await User.findById(decoded.userId);
+            const user = await User.findById(decoded.userId).select('-password');
 
             if (!user || user.role !== 'admin') {
                 return res.status(403).json({ message: 'Yêu cầu quyền admin' });

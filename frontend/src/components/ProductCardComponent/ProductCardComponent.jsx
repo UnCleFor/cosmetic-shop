@@ -2,15 +2,18 @@ import React from "react";
 import { Card, message } from "antd";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import { addToCart } from "../../redux/slices/cartSlice";
-import { useDispatch } from "react-redux"
 import "./ProductCardComponent.css";
+import useAdd from "../../hooks/cart/useAdd";
+import { useSelector } from "react-redux";
 
 const { Meta } = Card;
 
 const ProductCardComponent = ({ product, onAddToCart }) => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const addToCart = useAdd();
+  const { user } = useSelector((state) => state.user);
+
+  const isAuthenticated = Boolean(user);
 
   const handleNavigate = () => {
     navigate(`/product/${product._id}`);
@@ -18,23 +21,21 @@ const ProductCardComponent = ({ product, onAddToCart }) => {
 
   const handleAddToCart = (e) => {
     e.stopPropagation();
-    console.log("ADD PRODUCT:", {
-      id: product._id,
-      name: product.name
-    });
 
-    dispatch(addToCart({
+    if (!isAuthenticated) {
+    message.warning("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng");
+    navigate("/sign-in");
+    return;
+    }
+
+    addToCart({
       productId: product._id,
       name: product.name,
-      price:
-        product.discount > 0
-          ? product.price * (1 - product.discount / 100)
-          : product.price,
+      price: product.price,
+      discount: product.discount,
       image: product.images?.[0] || product.image,
       quantity: 1,
-    }));
-
-    message.success("Đã thêm vào giỏ hàng");
+    });
   };
 
   // Hàm format giá tiền

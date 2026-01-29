@@ -1,14 +1,73 @@
+import mongoose from "mongoose";
 import Order from "../models/order.model.js";
+import Cosmetic from "../models/cosmetic.model.js";
 
 class OrderService {
     // Tạo đơn hàng
     static async createOrder(data) {
-        const order = await Order.create(data);
-        return order;
+        const session = await mongoose.startSession();
+        session.startTransaction();
+
+        try {
+            const {
+                items
+            } = data;
+
+            // Check stock
+            for (const item of items) {
+                const product = await Cosmetic
+                    .findById(item.product)
+                    .session(session);
+
+                if (!product) {
+                    throw new Error("Sản phẩm không tồn tại");
+                }
+
+                if (product.stock < item.quantity) {
+                    throw new Error(
+                        `Sản phẩm "${product.name}" không đủ số lượng`
+                    );
+                }
+            }
+
+            // Trừ stock
+            for (const item of items) {
+                await Cosmetic.findByIdAndUpdate(
+                    item.product, {
+                        $inc: {
+                            stock: -item.quantity,
+                            sold: item.quantity
+                        }
+                    }, {
+                        session
+                    }
+                );
+            }
+
+            // Tạo đơn hàng
+            const order = new Order(data);
+            await order.save({
+                session
+            });
+
+            await session.commitTransaction();
+            session.endSession();
+
+            return order;
+
+        } catch (error) {
+            await session.abortTransaction();
+            session.endSession();
+            throw error;
+        }
     }
 
     // Lấy toàn bộ đơn hàng (cho admin)
-    static async getOrders({ page = 1, limit = 10, filters = {} }) {
+    static async getOrders({
+        page = 1,
+        limit = 10,
+        filters = {}
+    }) {
         const skip = (page - 1) * limit;
 
         const query = {};
@@ -17,15 +76,22 @@ class OrderService {
 
         const [orders, total] = await Promise.all([
             Order.find(query)
-                // .populate("user", "name email")
-                // .populate("items.product", "name price")
-                .sort({ createdAt: -1 })
-                .skip(skip)
-                .limit(limit),
+            // .populate("user", "name email")
+            // .populate("items.product", "name price")
+            .sort({
+                createdAt: -1
+            })
+            .skip(skip)
+            .limit(limit),
             Order.countDocuments(query),
         ]);
 
-        return { orders, total, page, limit };
+        return {
+            orders,
+            total,
+            page,
+            limit
+        };
     }
 
     // Lấy đơn hàng bằng id
@@ -81,8 +147,12 @@ class OrderService {
 
     // Lấy đơn hàng của 1 user
     static async getOrdersByUser(userId) {
-        return Order.find({ user: userId })
-            .sort({ createdAt: -1 });
+        return Order.find({
+                user: userId
+            })
+            .sort({
+                createdAt: -1
+            });
     }
 }
 

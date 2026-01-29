@@ -1,4 +1,3 @@
-// hooks/auth/useSignUp.js
 import { useMutation } from "@tanstack/react-query";
 import { message } from "antd";
 import { useNavigate } from "react-router-dom";

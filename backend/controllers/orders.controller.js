@@ -6,7 +6,7 @@ class OrdersController {
         try {
             const order = await OrderService.createOrder({
                 ...req.body,
-                user: req.user._id, // lấy từ middleware auth
+                user: req.user._id,
             });
 
             res.status(201).json({

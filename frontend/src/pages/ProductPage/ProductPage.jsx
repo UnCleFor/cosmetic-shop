@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import ProductCardComponent from "../../components/ProductCardComponent/ProductCardComponent";
-import PaginationComponent from "../../components/PaginationComponent";
+import PaginationComponent from "../../components/PaginationComponent/PaginationComponent";
 import SpinnerComponent from "../../components/SpinnerComponent/SpinnerComponent";
 import CosmeticsService from "../../services/cosmetics.service";
 import { useSearchParams } from "react-router-dom";
@@ -28,7 +28,6 @@ const ProductPage = () => {
 
   const {
     data,
-    isLoading,
     isFetching,
     isError,
   } = useQuery({

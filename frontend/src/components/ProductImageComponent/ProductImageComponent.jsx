@@ -20,7 +20,6 @@ const ProductImageComponent = ({ images = [], name = "Product" }) => {
   // Placeholder image dùng base64 hoặc online service
   const PLACEHOLDER_IMAGE = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400' viewBox='0 0 400 400'%3E%3Crect width='400' height='400' fill='%23f8f9fa'/%3E%3Cpath d='M100 150 L200 100 L300 150 L250 250 L150 250 Z' fill='%23e9ecef' stroke='%23adb5bd' stroke-width='2'/%3E%3Ctext x='200' y='320' font-family='Arial' font-size='16' fill='%236c757d' text-anchor='middle'%3ENo Image Available%3C/text%3E%3C/svg%3E";
 
-  console.log(images)
   // Xử lý images array
   const imageArray = React.useMemo(() => {
     if (!images || images.length === 0) {

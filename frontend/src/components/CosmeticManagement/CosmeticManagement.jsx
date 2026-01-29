@@ -1,5 +1,4 @@
 import React, { useState, useMemo } from "react";
-import { useQueryClient } from "@tanstack/react-query";
 import {
     Table,
     Button,
@@ -10,8 +9,7 @@ import {
     Select,
     Tag,
     Popconfirm,
-    Space,
-    message,
+    Space
 } from "antd";
 import { EditOutlined, DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import SpinnerComponent from "../SpinnerComponent/SpinnerComponent";
@@ -23,14 +21,13 @@ import useDelete from "../../hooks/cosmetic/useDelete";
 const { Option } = Select;
 
 const CosmeticManagement = () => {
-    const queryClient = useQueryClient();
     const [modalVisible, setModalVisible] = useState(false);
     const [editingCosmetic, setEditingCosmetic] = useState(null);
     const [form] = Form.useForm();
 
     // State cho phân trang và filter
     const [page, setPage] = useState(1);
-    const [search, setSearch] = useState("");
+    // const [search, setSearch] = useState("");
     const [categoryFilter, setCategoryFilter] = useState(null);
     const [statusFilter, setStatusFilter] = useState(null);
     const limit = 8;
@@ -214,7 +211,7 @@ const CosmeticManagement = () => {
                     placeholder="Tìm kiếm sản phẩm..."
                     style={{ width: 250 }}
                     value={search}
-                    onChange={(e) => {                        này khắc phục được lỗi của nó theo hướng sử dụng searchdebounce
+                    onChange={(e) => {                 
                         setSearch(e.target.value);
                         setPage(1); 
                     }}

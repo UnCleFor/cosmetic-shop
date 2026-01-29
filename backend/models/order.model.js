@@ -15,6 +15,7 @@ const orderSchema = new mongoose.Schema(
                     ref: "Cosmetic",
                     required: true,
                 },
+                discount: Number,
                 name: String,
                 price: Number,
                 quantity: {

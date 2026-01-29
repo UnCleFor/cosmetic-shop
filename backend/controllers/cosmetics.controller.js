@@ -7,13 +7,13 @@ class CosmeticsController {
             const cosmetic = await CosmeticService.createCosmetic(req.body);
 
             res.status(201).json({
-                message: "Cosmetic created successfully",
+                message: "Tạo sản phẩm thành công",
                 cosmetic,
             });
 
         } catch (err) {
             res.status(400).json({
-                message: "Cannot create cosmetic",
+                message: "Không thể tạo sản phẩm",
                 error: err.message,
             });
         }
@@ -55,7 +55,7 @@ class CosmeticsController {
             });
         } catch (err) {
             res.status(500).json({
-                message: "Cannot fetch cosmetics",
+                message: "Không thể lấy danh sách sản phẩm",
                 error: err.message,
             });
         }
@@ -79,7 +79,7 @@ class CosmeticsController {
             res.status(200).json(cosmetic);
         } catch (err) {
             res.status(500).json({
-                message: "Cannot fetch cosmetic",
+                message: "Không thể lấy chi tiết sản phẩm",
                 error: err.message,
             });
         }
@@ -96,17 +96,17 @@ class CosmeticsController {
 
             if (!updatedCosmetic) {
                 return res.status(404).json({
-                    message: "Cosmetic not found",
+                    message: "Không tìm thấy sản phẩm",
                 });
             }
 
             res.status(200).json({
-                message: "Cosmetic updated successfully",
+                message: "Cập nhật sản phẩm thành công",
                 cosmetic: updatedCosmetic,
             });
         } catch (err) {
             res.status(400).json({
-                message: "Cannot update cosmetic",
+                message: "Không thể cập nhật sản phẩm",
                 error: err.message,
             });
         }
@@ -123,16 +123,16 @@ class CosmeticsController {
 
             if (!deletedCosmetic) {
                 return res.status(404).json({
-                    message: "Cosmetic not found",
+                    message: "Không tìm thấy sản phẩm",
                 });
             }
 
             res.status(200).json({
-                message: "Cosmetic deleted successfully",
+                message: "Xóa sản phẩm thành công",
             });
         } catch (err) {
             res.status(500).json({
-                message: "Cannot delete cosmetic",
+                message: "Không thể xóa sản phẩm",
                 error: err.message,
             });
         }

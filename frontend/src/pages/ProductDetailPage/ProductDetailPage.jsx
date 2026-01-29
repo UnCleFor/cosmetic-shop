@@ -1,17 +1,42 @@
-import React, { useContext, useState } from "react";
-import { Row, Col, InputNumber, Tag, Divider } from "antd";
+import React, { useState } from "react";
+import { Row, Col, InputNumber, Tag, Divider, message } from "antd";
 import { ShoppingCartOutlined, TagOutlined } from "@ant-design/icons";
 import ButtonComponent from "../../components/ButtonComponent/ButtonComponent";
 import ProductImageComponent from "../../components/ProductImageComponent/ProductImageComponent";
-import { CartContext } from "../../context/CartContext";
 import useCosmetic from "../../hooks/cosmetic/useCosmetic";
 import SpinnerComponent from "../../components/SpinnerComponent/SpinnerComponent";
 import "./ProductDetailPage.css";
+import useAdd from "../../hooks/cart/useAdd";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router";
 
 const ProductDetailPage = () => {
   const { product, isLoading, isError } = useCosmetic();
-  const { addToCart } = useContext(CartContext);
   const [quantity, setQuantity] = useState(1);
+  const addToCart = useAdd()
+  const { user } = useSelector((state) => state.user);
+  const navigate = useNavigate();
+
+  const isAuthenticated = Boolean(user);
+
+  const handleAddToCart = (e) => {
+    e.stopPropagation();
+    
+    if (!isAuthenticated) {
+      message.warning("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng");
+      navigate("/sign-in");
+      return;
+    }
+
+    addToCart({
+      productId: product._id,
+      name: product.name,
+      price: product.price,
+      discount: product.discount,
+      image: product.images?.[0] || product.image,
+      quantity: quantity,
+    });
+  };
 
   if (isError) return <div className="error-message">Không tìm thấy sản phẩm</div>;
   if (!product) return null;
@@ -68,9 +93,6 @@ const ProductDetailPage = () => {
                     {product.status}
                   </Tag>
                 </div>
-                <div className="meta-item">
-                  <strong>Kho:</strong> {product.stock || "Nhiều"} sản phẩm
-                </div>
               </div>
 
               <Divider className="action-divider" />
@@ -91,8 +113,8 @@ const ProductDetailPage = () => {
                   type="primary"
                   size="large"
                   icon={<ShoppingCartOutlined />}
-                  onClick={() => addToCart(product, quantity)}
-                  className="add-to-cart-btn"
+                  onClick={handleAddToCart}
+                  className="add-to-cadrt-btn"
                 >
                   Thêm vào giỏ hàng
                 </ButtonComponent>

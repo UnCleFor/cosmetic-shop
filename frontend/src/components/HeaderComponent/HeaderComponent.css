@@ -7,7 +7,7 @@
   background-color: #fff;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   position: fixed;
-  top: 0; 
+  top: 0;
   left: 0;
   right: 0;
   z-index: 1;
@@ -43,8 +43,8 @@
 }
 
 .ant-input-search-button:hover {
-  background-color: var(--color-primary-dark) !important;
-  color: white;
+  background-color: white !important;
+  border-color: var(--color-primary) !important;
 }
 
 /* Cart */
@@ -170,7 +170,8 @@
   visibility: hidden;
   transform: translateY(-10px);
   transition: all 0.3s;
-  z-index: 1001; /* Cao hơn header */
+  z-index: 1001;
+  /* Cao hơn header */
 }
 
 .user-dropdown ul {
@@ -329,28 +330,30 @@
   .header-wrapper {
     padding: 0 15px;
   }
-  
+
   .right-actions {
     gap: 15px;
   }
-  
+
   .auth-container {
     display: none;
   }
-  
+
   .user-profile {
     display: none;
   }
-  
+
   .mobile-menu-button {
     display: block;
-    
+
   }
-  
+
   .mobile-nav-wrapper {
     display: block;
-    position: fixed; /* Cũng fixed cho mobile menu */
-    top: 64px; /* Dưới header */
+    position: fixed;
+    /* Cũng fixed cho mobile menu */
+    top: 64px;
+    /* Dưới header */
     left: 0;
     right: 0;
     height: calc(100vh - 64px);
@@ -366,12 +369,13 @@
   .logo-image {
     height: 32px;
   }
-  
+
   .cart-icon {
     font-size: 1.5rem;
   }
-  
+
   .header-spacer {
-    height: 60px; /* Điều chỉnh cho mobile nếu header thấp hơn */
+    height: 60px;
+    /* Điều chỉnh cho mobile nếu header thấp hơn */
   }
 }

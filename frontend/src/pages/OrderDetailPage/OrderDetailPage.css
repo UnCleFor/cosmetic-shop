@@ -30,6 +30,10 @@
   margin: 0;
 }
 
+.order-id {
+  color: var(--color-primary);
+}
+
 /* Status */
 .order-status-minimal {
   display: flex;

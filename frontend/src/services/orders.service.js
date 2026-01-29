@@ -1,6 +1,12 @@
 import axiosClient from "../utils/axiosClient";
 
 const OrdersService = {
+
+    // USER: tạo đơn hàng
+    createOrder(data) {
+        return axiosClient.post("/orders", data);
+    },
+    
     // USER: lấy đơn hàng của chính mình
     getMyOrders() {
         return axiosClient.get("/orders/my");

@@ -1,11 +1,14 @@
 import React from "react";
-import { StyledButton } from "./ButtonComponent.styles";
+import "./ButtonComponent.css"
 
 const ButtonComponent = ({ children, onClick, type = "button" }) => {
   return (
-    <StyledButton onClick={onClick} type={type}>
+    <button
+      onClick={onClick} 
+      type={type}
+      className="btn-primary">
       {children}
-    </StyledButton>
+    </button>
   );
 };
 
